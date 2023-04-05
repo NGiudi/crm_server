@@ -10,9 +10,7 @@ Este repositorio contiene el backend de un sistema de gestión de inventario y v
 
   Únicamente los usuarios administradores son capaces de crear usuarios.
 
-  TODO: Agregar dirección
-
-  ´´´
+  ```
     > POST `/users/signup`
 
     body: {
@@ -22,33 +20,33 @@ Este repositorio contiene el backend de un sistema de gestión de inventario y v
       "email": "nicolas.m.giudice@gmail.com",
       "role": "admin"
     }
-  ´´´
+  ```
   
   2. Autenticar usuario logueado:
-  ´´´
+  ```
     > POST `/users/authentication`
 
     body: {
       "user_id": 1,
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJ1c2VyX2lkIjoxLCJpYXQiOjE2ODA1NTkwMzB9hrfWi_EkN-tWNF36x-4u7hoDC_BOFdRPPauhpxQVUU4"
     }
-  ´´´
+  ```
 
   3. Iniciar sesión:
-  ´´´
+  ```
     > POST `/login`
 
     body: {
       "email": "nicolas.m.giudice@gmail.com",
       "password": "pass1234"
     }
-  ´´´
+  ```
 
   4. Cerrar sesión:
-  ´´´
+  ```
     > POST `/logout/:id`
 
-  ´´´
+  ```
 
 
 ### CRUD Usuarios
