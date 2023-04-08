@@ -3,6 +3,8 @@ exports.MESSAGES = {
 	INVALID_TOKEN: "invalid token",
 	LOGIN_ERROR: "email or password was not correct",
 	LOGIN_REQUIRED_FIELDS: "email and password are required",
+	PRODUCT_NOT_FOUND: "product not found",
+	TOKEN_REQUIRED: "authorization header is required",
 	USER_CREATED: "user created successfully.",
 	USER_EXIST: "user already exists",
 	USER_INACTIVE: "inactive user",

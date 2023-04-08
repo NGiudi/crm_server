@@ -1,16 +1,8 @@
 const { TABLES } = require("../const/tableNames");
 
 module.exports = (sequelize, type) => {
-	return sequelize.define(TABLES.ADDRESSES, {
-		apartament: {
-			type: type.STRING,
-		},
-		city: {
-			allowNull: false,
-			type: type.STRING,
-		},
-		country: {
-			allowNull: false,
+	return sequelize.define(TABLES.PRODUCTS, {
+		brand_name: {
 			type: type.STRING,
 		},
 		createdAt: {
@@ -26,24 +18,16 @@ module.exports = (sequelize, type) => {
 			primaryKey: true,
 			type: type.INTEGER,
 		},
-		street_name: {
+		name: {
 			allowNull: false,
 			type: type.STRING,
-		},
-		street_number: {
-			allowNull: false,
-			type: type.INTEGER,
 		},
 		updatedAt: {
 			field: "updated_at",
 			type: type.DATE,
 		},
-		zip_code: {
-			allowNull: false,
-			type: type.INTEGER,
-		},
 	},
 	{
-		paranoid: true,
+		paranoid: true
 	});
 };

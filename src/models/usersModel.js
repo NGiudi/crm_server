@@ -1,18 +1,26 @@
-const { USERS_TABLE } = require("../const/tableNames");
+const { TABLES } = require("../const/tableNames");
 
 module.exports = (sequelize, type) => {
-	return sequelize.define(USERS_TABLE, {
+	return sequelize.define(TABLES.USERS, {
 		active: {
 			allowNull: false,
 			defaultValue: true,
 			type: type.BOOLEAN,
 		},
+		createdAt: {
+			field: "created_at",
+			type: type.DATE,
+		},
 		deactivation_reason: {
 			type: type.STRING,
 		},
+		deletedAt: {
+			field: "deleted_at",
+			type: type.DATE,
+		},
 		email: {
-			type: type.STRING,
 			allowNull: false,
+			type: type.STRING,
 		},
 		id:{
 			autoIncrement: true,
@@ -20,26 +28,30 @@ module.exports = (sequelize, type) => {
 			type: type.INTEGER,
 		},
 		last_name: {
-			type: type.STRING,
 			allowNull: false,
+			type: type.STRING,
 		},
 		names: {
-			type: type.STRING,
 			allowNull: false,
+			type: type.STRING,
 		},
 		password: {
-			type: type.STRING,
 			allowNull: false,
+			type: type.STRING,
 		},
 		phone: {
 			type: type.STRING,
 		},
 		role: {
-			type: type.STRING,
 			allowNull: false,
+			type: type.STRING,
 		},
 		token: {
 			type: type.STRING,
+		},
+		updatedAt: {
+			field: "updated_at",
+			type: type.DATE,
 		},
 	},
 	{

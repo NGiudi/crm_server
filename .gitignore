@@ -15,6 +15,7 @@ dist/
 *.py[cod]
 
 # Log files
+/logs
 *.log
 
 # Environment Variables

@@ -7,7 +7,43 @@ const { Users } = require("../models/connectionsModel");
 const { MESSAGES } = require("../const/responses");
 
 /*
-  Middleware: authMiddleware
+  Middleware: authLoggedInUser
+
+  Descripción:
+    Este middleware es utilizado para autenticar y autorizar a los usuarios de una 
+    aplicación web. Comprueba si el usuario está activo. También comprueba si el 
+    token proporcionado en los encabezados de la solicitud es válido.
+*/
+const authLoggedInUser = () => async (req, res, next) => {
+	const token = req.headers.authorization;
+
+	if (!token)
+		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
+
+	try {
+		const decodedToken = jwt.verify(token,  process.env.JWT_KEY);    
+
+		const user = await Users.findByPk(decodedToken.user_id, {
+			attributes: { 
+				include: ["token", "role"],
+			}
+		});
+
+		if (!user || user.token !== token)
+			return res.status(401).json({ message: MESSAGES.INVALID_TOKEN });
+
+		if (!user.active)
+			return res.status(401).json({ message: MESSAGES.USER_INACTIVE });
+
+		next();
+	} catch {
+		console.log("error en middleware");
+		return res.status(500).json();
+	}
+};
+
+/*
+  Middleware: authRoleMiddleware
 
   Descripción:
     Este middleware es utilizado para autenticar y autorizar a los usuarios de una 
@@ -15,9 +51,11 @@ const { MESSAGES } = require("../const/responses");
     ruta y comprueba si el usuario tiene ese rol y si está activo. También comprueba si el 
     token proporcionado en los encabezados de la solicitud es válido.
 */
-
-const authMiddleware = (role) => async (req, res, next) => {
+const authRoleMiddleware = (role) => async (req, res, next) => {
 	const token = req.headers.authorization;
+
+	if (!token)
+		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {  
 		const decodedToken = jwt.verify(token,  process.env.JWT_KEY);    
@@ -45,4 +83,7 @@ const authMiddleware = (role) => async (req, res, next) => {
 	}
 };
 
-module.exports = authMiddleware;
+module.exports = {
+	authLoggedInUser,
+	authRoleMiddleware,	
+};

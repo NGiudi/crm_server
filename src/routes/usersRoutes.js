@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const lodash = require("lodash");
 
 /* middlewares */
-const authMiddleware = require("../middlewares/auth");
+const { authRoleMiddleware } = require("../middlewares/auth");
 
 /* utils */
 const { compareEncrypt, hashEncrypt } = require("../utils/encypt");
@@ -30,18 +30,18 @@ const { SETTINGS } = require("../const/settings");
   Respuestas:
     * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
       con la lista de todos los usuarios. El objeto usuario contiene 
-      todos los campos de la tabla Usuarios excepto deletedAt, 
+      todos los campos de la tabla Usuarios excepto deleted_at, 
       password y token.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
-router.get("/", authMiddleware("admin"), async (req, res) => {
+router.get("/", authRoleMiddleware("admin"), async (req, res) => {
 	const page = req.body.page || 1;
 
 	try {
 		const users = await Users.findAll({
 			attributes: {
-				exclude: ["deletedAt", "password", "token"],
+				exclude: ["deleted_at", "password", "token"],
 			},
 			limit: SETTINGS.PAGE_LIMIT,
 			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
@@ -72,17 +72,17 @@ router.get("/", authMiddleware("admin"), async (req, res) => {
   Respuestas:
     * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
       con el usuario. El objeto usuario contiene todos los campos de la 
-      tabla Usuarios excepto deletedAt, password y token.
+      tabla Usuarios excepto deleted_at, password y token.
 
     * 404 (Not Found): Si el usuario no existe.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
-router.get("/:id", authMiddleware("admin"), async (req, res) => {
+router.get("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	try {
 		const user = await Users.findByPk(req.params.id, {
 			attributes: { 
-				exclude: ["deletedAt", "password", "token"],
+				exclude: ["deleted_at", "password", "token"],
 			},
 		});
 
@@ -112,17 +112,17 @@ router.get("/:id", authMiddleware("admin"), async (req, res) => {
   Respuestas:
     * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
       con el usuario. El objeto usuario contiene todos los campos de la 
-      tabla Usuarios excepto deletedAt, password y token.
+      tabla Usuarios excepto deleted_at, password y token.
 
     * 404 (Not Found): Si el usuario no existe.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
-router.put("/:id", authMiddleware("admin"), async (req, res) => {
+router.put("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	try {
 		const user = await Users.findByPk(req.params.id, {
 			attributes: { 
-				exclude: ["deletedAt", "password", "token"],
+				exclude: ["deleted_at", "password", "token"],
 			},
 		});
 
@@ -160,7 +160,7 @@ router.put("/:id", authMiddleware("admin"), async (req, res) => {
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
-router.delete("/:id", authMiddleware("admin"), async (req, res) => {
+router.delete("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	try {
 		const user = await Users.destroy({ 
 			where: { id: req.params.id },
@@ -193,7 +193,7 @@ router.delete("/:id", authMiddleware("admin"), async (req, res) => {
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
-router.post("/signup", authMiddleware("admin"), async (req, res) => {
+router.post("/signup", authRoleMiddleware("admin"), async (req, res) => {
 	const { email, password } = req.body;
 
 	try {
@@ -239,7 +239,7 @@ router.post("/signup", authMiddleware("admin"), async (req, res) => {
   Respuestas:
     * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
       con el usuario. El objeto usuario contiene todos los campos de la 
-      tabla Usuarios excepto deletedAt, password y token.
+      tabla Usuarios excepto deleted_at, password y token.
 
     * 400 (Bad Request): Si el token o el user id no fueron enviados o
       están vacíos.
@@ -260,7 +260,7 @@ router.post("/authentication", async (req, res) => {
 		//? search for the user in the database using the provided id.
 		const user = await Users.findByPk(user_id, {
 			attributes: { 
-				exclude: ["deletedAt", "password"],
+				exclude: ["deleted_at", "password"],
 			},
 		});
 
@@ -292,7 +292,7 @@ router.post("/authentication", async (req, res) => {
   Respuestas:
     * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
       con el usuario y el token generado. El objeto usuario contiene todos 
-      los campos de la tabla Usuarios excepto deletedAt, password y
+      los campos de la tabla Usuarios excepto deleted_at, password y
       token.
 
     * 400 (Bad Request): Si el email o la contraseña no fueron enviados o
@@ -312,7 +312,7 @@ router.post("/login", async (req, res) => {
 	try {
 		const user = await Users.findOne({ 
 			attributes: { 
-				exclude: ["deletedAt"],
+				exclude: ["deleted_at"],
 			},
 			where: { email },
 		});

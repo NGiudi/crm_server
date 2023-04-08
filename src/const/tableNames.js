@@ -1,2 +1,6 @@
-exports.ADDRESSES_TABLE = "addresses";
-exports.USERS_TABLE = "users";
+exports.TABLES = {
+	ADDRESSES: "addresses",
+	PRODUCTS: "products",
+	USERS: "users",
+	VARIANTS: "variants",
+};
