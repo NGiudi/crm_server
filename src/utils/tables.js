@@ -1,8 +1,8 @@
 /* constants */
 const { SETTINGS } = require("../const/settings");
 
-async function getTableStats(model, page) {
-	const totalUsers = await model.count();
+async function getTableStats(model, page, options) {
+	const totalUsers = await model.count(options);
 
 	return {
 		page: page,

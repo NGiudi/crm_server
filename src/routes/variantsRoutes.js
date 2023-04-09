@@ -7,77 +7,84 @@ const { authLoggedInUser } = require("../middlewares/auth");
 const { getTableStats } = require("../utils/tables");
 
 /* models */
-const { Products } = require("../models/connectionsModel");
+const { Variants } = require("../models/connectionsModel");
 
 /* constants */
 const { MESSAGES } = require("../const/responses");
 const { SETTINGS } = require("../const/settings");
 
 /**
-  Endpoint: GET `/products`
+  Endpoint: GET `/variants`
 
   Descripción:
-    Este endpoint permite obtener una lista de todos los productos 
+    Este endpoint permite obtener una lista de todos los variantes 
     registrados en la aplicación.
   
 	Parámetros de consulta:
     * page: página que se debe devolver.
+		* product_id: para devolver las variantes de un producto en específico.
 
   Respuestas:
     * 200 (OK): retorna un objeto JSON con la lista de una página de 
-      productos. El objeto producto contiene todos los campos de la 
+      variantes. El objeto variante contiene todos los campos de la 
       tabla Productos excepto deleted_at.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/", authLoggedInUser(), async (req, res) => {
-	const page = req.body.page || 1;
+	const { page, product_id } = req.body;
+	const _page = page || 1;
 
 	try {
-		const products = await Products.findAll({
+		const variants = await Variants.findAll({
 			attributes: {
 				exclude: ["deleted_at"],
 			},
 			limit: SETTINGS.PAGE_LIMIT,
-			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
+			offset: (_page - 1) * SETTINGS.PAGE_LIMIT,
+			where: { product_id },
 		});
 
-		const stats = await getTableStats(Products, page);
+		const statsOptions = { 
+			where: { product_id },
+		};
 
-		return res.status(200).json({ products, stats });
+		const stats = await getTableStats(Variants, _page, statsOptions);
+
+		return res.status(200).json({ variants, stats });
 	} catch {
 		res.status(500).json();
 	}
 });
 
 /**
-  Endpoint: GET `/products/:id`
+  Endpoint: GET `/variants/:id`
   
   Descripción:
-    Este endpoint permite obtener información detallada de un producto 
+    Este endpoint permite obtener información detallada de un variante 
     específico por su ID.
   
   Parámetros de consulta:
-    * id: El ID del producto a buscar.
+    * id: El ID del variante a buscar.
 
   Respuestas:
-    * 200 (OK): Retorna un objeto JSON con el producto. El objeto producto 
+    * 200 (OK): Retorna un objeto JSON con el variante. El objeto variante 
       contiene todos los campos de la tabla Producto excepto deleted_at.
 
-    * 404 (Not Found): Si el producto no existe.
+    * 404 (Not Found): Si el variante no existe.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/:id", authLoggedInUser(), async (req, res) => {
 	try {
-		const product = await Products.findByPk(req.params.id, {
+		const variant = await Variants.findByPk(req.params.id, {
 			attributes: { 
 				exclude: ["deleted_at"],
 			},
 		});
 
-		if (product)
-			return res.status(200).json(product);
+		if (variant)
+			return res.status(200).json(variant);
 
 		return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });  		
 	} catch {
@@ -86,39 +93,39 @@ router.get("/:id", authLoggedInUser(), async (req, res) => {
 });
 
 /**
-  Endpoint: PUT `/products/:id`
+  Endpoint: PUT `/variants/:id`
 
   Descripción:
-    Este endpoint te permite actualizar la información de un producto en 
+    Este endpoint te permite actualizar la información de un variante en 
     particular a través de su ID.
 
   Parámetros de consulta:
-    * id: El ID del producto a actualizar.
+    * id: El ID del variante a actualizar.
 
   Respuestas:
-    * 200 (OK): Retorna un objeto JSON con el producto. El objeto producto
+    * 200 (OK): Retorna un objeto JSON con el variante. El objeto variante
       contiene todos los campos de la tabla Productos excepto deleted_at.
 
-    * 404 (Not Found): Si el producto no existe.
+    * 404 (Not Found): Si el variante no existe.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.put("/:id", authLoggedInUser(), async (req, res) => {
 	try {
-		const product = await Products.findByPk(req.params.id, {
+		const variant = await Variants.findByPk(req.params.id, {
 			attributes: { 
 				exclude: ["deleted_at"],
 			},
 		});
 
-		if (!product)
+		if (!variant)
 			return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
 
-		// update product fields.
-		Object.assign(product, req.body);
-		await product.save();
+		// update variant fields.
+		Object.assign(variant, req.body);
+		await variant.save();
 
-		return res.json({ product });
+		return res.json({ variant });
 	} catch {
 		return res.status(500).json();
 	}
@@ -128,26 +135,26 @@ router.put("/:id", authLoggedInUser(), async (req, res) => {
   Endpoint: DELETE `/users/:id`
 
   Descripción:
-    Este endpoint permite eliminar un producto específico por su ID.
+    Este endpoint permite eliminar un variante específico por su ID.
 
   Parámetros de consulta:
-    * id: El ID del producto a eliminar.
+    * id: El ID del variante a eliminar.
 
   Respuestas:
     * 204 (Not Content): Si la autenticación es exitosa, no retorna ningún
       valor.
 
-    * 404 (Not Found): Si el producto no existe.
+    * 404 (Not Found): Si el variante no existe.
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.delete("/:id", authLoggedInUser(),  async (req, res) => {
 	try {
-		const product = await Products.destroy({
+		const variant = await Variants.destroy({
 			where: { id: req.params.id },
 		});
 
-		if (!product)
+		if (!variant)
 			return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
     
 		return res.status(204).json();

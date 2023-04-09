@@ -26,7 +26,10 @@ const { SETTINGS } = require("../const/settings");
   Autenticación:
     Es necesario estar autenticado, tener el rol de administrador y ser un 
     usuario activo para acceder a este endpoint.
-  
+
+	Parámetros de consulta:
+    * page: página que se debe devolver.
+
   Respuestas:
     * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
       con la lista de todos los usuarios. El objeto usuario contiene 
