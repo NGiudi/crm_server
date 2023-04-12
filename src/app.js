@@ -8,9 +8,9 @@ require("dotenv").config();
 const logger = require("./utils/logger");
 
 /* routes */
-const productsRoutes = require("./routes/productsRoutes");
-const usersRoutes = require("./routes/usersRoutes");
-const variantsRoutes = require("./routes/variantsRoutes");
+const productsRoutes = require("./routes/products/productsRoutes");
+const usersRoutes = require("./routes/users/usersRoutes");
+const variantsRoutes = require("./routes/variants/variantsRoutes");
 
 const app = express();
 
