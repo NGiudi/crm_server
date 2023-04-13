@@ -1,4 +1,4 @@
-# Lens Supply
+# Lens Supply - Backend
 
 Este repositorio contiene el backend de un sistema de gestión de inventario y ventas. Con el fin de mejorar la eficiencia y disminuir errores de una distribuidora de lentes de contacto.
 
@@ -79,4 +79,5 @@ npm start
 ## Cliente
 
 Em este repositorio se encuentra subida la parte del servidor, para ver la parte del cliente debe dirigirse al siguiente repositorio:
-TODO: Agregar link.
+
+https://github.com/NGiudi/crm_client
