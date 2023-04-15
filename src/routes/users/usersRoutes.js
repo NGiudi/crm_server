@@ -3,18 +3,18 @@ const jwt = require("jsonwebtoken");
 const lodash = require("lodash");
 
 /* middlewares */
-const { authRoleMiddleware } = require("../middlewares/auth");
+const { authRoleMiddleware } = require("../../middlewares/auth");
 
 /* utils */
-const { compareEncrypt, hashEncrypt } = require("../utils/encypt");
-const { getTableStats } = require("../utils/tables");
+const { compareEncrypt, hashEncrypt } = require("../../utils/encypt");
+const { getTableStats } = require("../../utils/tables");
 
 /* models */
-const { Addresses, Users } = require("../models/connectionsModel");
+const { Addresses, Users } = require("../../models/connectionsModel");
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
-const { SETTINGS } = require("../const/settings");
+const { MESSAGES } = require("../../const/responses");
+const { SETTINGS } = require("../../const/settings");
 
 /**
   Endpoint: GET `/users`

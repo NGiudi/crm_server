@@ -1,17 +1,17 @@
 const router = require("express").Router();
 
 /* middlewares */
-const { authLoggedInUser } = require("../middlewares/auth");
+const { authLoggedInUser } = require("../../middlewares/auth");
 
 /* utils */
-const { getTableStats } = require("../utils/tables");
+const { getTableStats } = require("../../utils/tables");
 
 /* models */
-const { Variants } = require("../models/connectionsModel");
+const { Variants } = require("../../models/connectionsModel");
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
-const { SETTINGS } = require("../const/settings");
+const { MESSAGES } = require("../../const/responses");
+const { SETTINGS } = require("../../const/settings");
 
 /**
   Endpoint: GET `/variants`
