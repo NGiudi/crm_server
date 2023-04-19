@@ -8,6 +8,7 @@ const { authRoleMiddleware } = require("../../middlewares/auth");
 /* utils */
 const { compareEncrypt, hashEncrypt } = require("../../utils/encypt");
 const { getTableStats } = require("../../utils/tables");
+const { parseToInt } = require("../../utils/numbers");
 
 /* models */
 const { Addresses, Users } = require("../../models/connectionsModel");
@@ -39,7 +40,7 @@ const { SETTINGS } = require("../../const/settings");
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/", authRoleMiddleware("admin"), async (req, res) => {
-	const page = req.body.page || 1;
+	const page = parseToInt(req.query.page, 1);
 
 	try {
 		const users = await Users.findAll({

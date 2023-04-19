@@ -5,6 +5,7 @@ const { authLoggedInUser } = require("../../middlewares/auth");
 
 /* utils */
 const { getTableStats } = require("../../utils/tables");
+const { parseToInt } = require("../../utils/numbers");
 
 /* models */
 const { Products } = require("../../models/connectionsModel");
@@ -31,7 +32,7 @@ const { SETTINGS } = require("../../const/settings");
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/", authLoggedInUser(), async (req, res) => {
-	const page = req.body.page || 1;
+	const page = parseToInt(req.query.page, 1);
 
 	try {
 		const products = await Products.findAll({

@@ -5,6 +5,7 @@ const { authLoggedInUser } = require("../../middlewares/auth");
 
 /* utils */
 const { getTableStats } = require("../../utils/tables");
+const { parseToInt } = require("../../utils/numbers");
 
 /* models */
 const { Variants } = require("../../models/connectionsModel");
@@ -32,8 +33,8 @@ const { SETTINGS } = require("../../const/settings");
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/", authLoggedInUser(), async (req, res) => {
-	const { page, product_id } = req.body;
-	const _page = page || 1;
+	const page = parseToInt(req.query.page, 1);
+	const { product_id } = req.body;
 
 	try {
 		const variants = await Variants.findAll({
@@ -41,7 +42,7 @@ router.get("/", authLoggedInUser(), async (req, res) => {
 				exclude: ["deleted_at"],
 			},
 			limit: SETTINGS.PAGE_LIMIT,
-			offset: (_page - 1) * SETTINGS.PAGE_LIMIT,
+			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
 			where: { product_id },
 		});
 
@@ -49,7 +50,7 @@ router.get("/", authLoggedInUser(), async (req, res) => {
 			where: { product_id },
 		};
 
-		const stats = await getTableStats(Variants, _page, statsOptions);
+		const stats = await getTableStats(Variants, page, statsOptions);
 
 		return res.status(200).json({ variants, stats });
 	} catch {
