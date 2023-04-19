@@ -1,7 +1,7 @@
 function parseToInt(string, defaultValue = 0) {
 	let number = parseInt(string);
 
-	if (number === isNaN) {
+	if (isNaN(number)) {
 		number = defaultValue;
 	}
 
