@@ -4,6 +4,7 @@ const router = require("express").Router();
 const { authLoggedInUser } = require("../../middlewares/auth");
 
 /* utils */
+const { isEmptyObject } = require("../../utils/objects");
 const { getTableStats } = require("../../utils/tables");
 const { parseToInt } = require("../../utils/numbers");
 
@@ -34,7 +35,10 @@ const { SETTINGS } = require("../../const/settings");
 */
 router.get("/", authLoggedInUser(), async (req, res) => {
 	const page = parseToInt(req.query.page, 1);
-	const { product_id } = req.body;
+	const { product_id } = req.query;
+
+	if (!product_id)
+		return res.status(400).json({ message: MESSAGES.PRODUCT_ID_REQUIRED });
 
 	try {
 		const variants = await Variants.findAll({
@@ -52,7 +56,7 @@ router.get("/", authLoggedInUser(), async (req, res) => {
 
 		const stats = await getTableStats(Variants, page, statsOptions);
 
-		return res.status(200).json({ variants, stats });
+		return res.status(200).json({ stats, variants });
 	} catch {
 		res.status(500).json();
 	}
@@ -87,7 +91,7 @@ router.get("/:id", authLoggedInUser(), async (req, res) => {
 		if (variant)
 			return res.status(200).json(variant);
 
-		return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });  		
+		return res.status(404).json({ message: MESSAGES.VARIANT_NOT_FOUND });  		
 	} catch {
 		return res.status(500).json();
 	}
@@ -111,7 +115,10 @@ router.get("/:id", authLoggedInUser(), async (req, res) => {
 
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
-router.put("/:id", authLoggedInUser(), async (req, res) => {
+router.put("/:id", authLoggedInUser(), async (req, res) => {	
+	if (isEmptyObject(req.body))
+		return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
+
 	try {
 		const variant = await Variants.findByPk(req.params.id, {
 			attributes: { 
@@ -120,7 +127,7 @@ router.put("/:id", authLoggedInUser(), async (req, res) => {
 		});
 
 		if (!variant)
-			return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
+			return res.status(404).json({ message: MESSAGES.VARIANT_NOT_FOUND });
 
 		// update variant fields.
 		Object.assign(variant, req.body);
@@ -156,7 +163,7 @@ router.delete("/:id", authLoggedInUser(),  async (req, res) => {
 		});
 
 		if (!variant)
-			return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
+			return res.status(404).json({ message: MESSAGES.VARIANT_NOT_FOUND });
     
 		return res.status(204).json();
 	} catch {

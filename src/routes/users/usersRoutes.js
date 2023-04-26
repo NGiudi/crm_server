@@ -7,6 +7,7 @@ const { authRoleMiddleware } = require("../../middlewares/auth");
 
 /* utils */
 const { compareEncrypt, hashEncrypt } = require("../../utils/encypt");
+const { isEmptyObject } = require("../../utils/objects");
 const { getTableStats } = require("../../utils/tables");
 const { parseToInt } = require("../../utils/numbers");
 
@@ -123,6 +124,9 @@ router.get("/:id", authRoleMiddleware("admin"), async (req, res) => {
     * 500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.put("/:id", authRoleMiddleware("admin"), async (req, res) => {
+	if (isEmptyObject(req.body))
+		return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
+
 	try {
 		const user = await Users.findByPk(req.params.id, {
 			attributes: { 
