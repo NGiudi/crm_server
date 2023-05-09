@@ -12,7 +12,7 @@ const { getTableStats } = require("../../utils/tables");
 const { parseToInt } = require("../../utils/numbers");
 
 /* models */
-const { Addresses, Users } = require("../../models/connectionsModel");
+const { Users } = require("../../models/connectionsModel");
 
 /* constants */
 const { MESSAGES } = require("../../const/responses");
@@ -217,12 +217,6 @@ router.post("/signup", authRoleMiddleware("admin"), async (req, res) => {
 		// create a new user.
 		const newUser = new Users({ ...req.body, password: hashedPassword });
 		await newUser.save();
-
-		// create a new address and link to user.
-		const newAddress = await Addresses.create({ ...req.body.address, user_id: newUser.id });
-    
-		// link user to address.
-		await newUser.update({ address_id: newAddress.id });
 
 		return res.status(201).json({ message: MESSAGES.USER_CREATED });
 	} catch {

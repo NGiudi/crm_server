@@ -17,7 +17,7 @@ const sequilize = new Sequilize(process.env.DB_NAME, process.env.DB_USER, proces
 );
 
 sequilize.sync({force: false})
-	.then(() => logger.info ("Sincronizated table!"))
-	.catch ((error) => logger.error (`Table synchronization failed! ${error}`));
+	.then(() => logger.info("Sincronizated table!"))
+	.catch ((error) => logger.error(`Table synchronization failed! ${error}`));
 
 module.exports = sequilize;
