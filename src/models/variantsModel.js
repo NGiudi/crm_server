@@ -30,6 +30,14 @@ module.exports = (sequelize, type) => {
 			allowNull: false,
 			type: type.DOUBLE,
 		},
+		product_id: {
+      allowNull: false,
+      references: {
+				model: Variants,
+				key: "id",
+			},
+      type: type.INTEGER,
+    },
 		updatedAt: {
 			field: "updated_at",
 			type: type.DATE,

@@ -11,9 +11,6 @@ module.exports = (sequelize, type) => {
 			field: "created_at",
 			type: type.DATE,
 		},
-		deactivation_reason: {
-			type: type.STRING,
-		},
 		deletedAt: {
 			field: "deleted_at",
 			type: type.DATE,

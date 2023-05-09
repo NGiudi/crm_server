@@ -1,6 +1,6 @@
 exports.TABLES = {
-	ADDRESSES: "addresses",
 	PRODUCTS: "products",
+	SALES: "sales", 
 	USERS: "users",
 	VARIANTS: "variants",
 };
