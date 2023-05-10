@@ -10,7 +10,6 @@ const logger = require("./utils/logger");
 /* routes */
 const productsRoutes = require("./routes/products/productsRoutes");
 const usersRoutes = require("./routes/users/usersRoutes");
-const variantsRoutes = require("./routes/variants/variantsRoutes");
 
 const app = express();
 
@@ -22,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 /* routes in use. */
 app.use("/products", productsRoutes);
 app.use("/users", usersRoutes);
-app.use("/variants", variantsRoutes);
 
 /* init listen server in asigned port.*/
 const port = process.env.PORT || 3005;

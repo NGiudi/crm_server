@@ -1,6 +1,6 @@
 const { TABLES } = require("../const/tableNames");
 
-const { Users, Variants } = require("./connectionsModel");
+const { Users, Products } = require("./connectionsModel");
 
 module.exports = (sequelize, type) => {
 	return sequelize.define(TABLES.SALES, {
@@ -25,6 +25,14 @@ module.exports = (sequelize, type) => {
       allowNull: false,
 			type: type.DOUBLE,
     },
+		product_id: {
+      allowNull: false,
+      references: {
+				model: Products,
+				key: "id",
+			},
+      type: type.INTEGER,
+    },
     quantity: {
       allowNull: false,
 			type: type.INTEGER,
@@ -41,14 +49,6 @@ module.exports = (sequelize, type) => {
 			},
       type: type.INTEGER,
     },
-    variant_id: {
-      allowNull: false,
-      references: {
-				model: Variants,
-				key: "id",
-			},
-      type: type.INTEGER,
-    }
 	},
 	{
 		paranoid: true

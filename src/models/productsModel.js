@@ -13,6 +13,9 @@ module.exports = (sequelize, type) => {
 			field: "deleted_at",
 			type: type.DATE,
 		},
+		description: {
+			type: type.STRING, 
+		},
 		id:{
 			autoIncrement: true,
 			primaryKey: true,
@@ -22,9 +25,17 @@ module.exports = (sequelize, type) => {
 			allowNull: false,
 			type: type.STRING,
 		},
+		price: {
+			allowNull: false,
+			type: type.DOUBLE,
+		},
 		updatedAt: {
 			field: "updated_at",
 			type: type.DATE,
+		},
+		stock: {
+			allowNull: false,
+			type: type.INTEGER,
 		},
 	},
 	{
