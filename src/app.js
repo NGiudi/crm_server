@@ -9,6 +9,7 @@ const logger = require("./utils/logger");
 
 /* routes */
 const productsRoutes = require("./routes/products/productsRoutes");
+const salesRoutes = require("./routes/sales/salesRoutes");
 const usersRoutes = require("./routes/users/usersRoutes");
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* routes in use. */
 app.use("/products", productsRoutes);
+app.use("/sales", salesRoutes);
 app.use("/users", usersRoutes);
 
 /* init listen server in asigned port.*/

@@ -18,7 +18,7 @@ const { Users } = require("../../models/connectionsModel");
 const { MESSAGES } = require("../../const/responses");
 const { SETTINGS } = require("../../const/settings");
 
-/**
+/*
   Endpoint: GET `/users`
 
   Descripción:
@@ -30,15 +30,15 @@ const { SETTINGS } = require("../../const/settings");
     usuario activo para acceder a este endpoint.
 
 	Parámetros de consulta:
-    * page: página que se debe devolver.
+    page: página que se debe devolver.
 
   Respuestas:
-    * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
-      con la lista de todos los usuarios. El objeto usuario contiene 
-      todos los campos de la tabla Usuarios excepto deleted_at, 
-      password y token.
+    200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
+    con la lista de todos los usuarios. El objeto usuario contiene 
+    todos los campos de la tabla Usuarios excepto deleted_at, 
+    password y token.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/", authRoleMiddleware("admin"), async (req, res) => {
 	const page = parseToInt(req.query.page, 1);
@@ -60,7 +60,7 @@ router.get("/", authRoleMiddleware("admin"), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: GET `/users/:id`
   
   Descripción:
@@ -72,16 +72,16 @@ router.get("/", authRoleMiddleware("admin"), async (req, res) => {
     usuario activo para acceder a este endpoint.
   
   Parámetros de consulta:
-    * id: El ID del usuario a buscar.
+    id: El ID del usuario a buscar.
 
   Respuestas:
-    * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
-      con el usuario. El objeto usuario contiene todos los campos de la 
-      tabla Usuarios excepto deleted_at, password y token.
+    200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
+    con el usuario. El objeto usuario contiene todos los campos de la 
+    tabla Usuarios excepto deleted_at, password y token.
 
-    * 404 (Not Found): Si el usuario no existe.
-
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    404 (Not Found): Si el usuario no existe.
+		
+		500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	try {
@@ -100,7 +100,7 @@ router.get("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: PUT `/users/:id`
 
   Descripción:
@@ -112,16 +112,16 @@ router.get("/:id", authRoleMiddleware("admin"), async (req, res) => {
     usuario activo para acceder a este endpoint.
   
   Parámetros de consulta:
-    * id: El ID del usuario a actualizar.
+    id: El ID del usuario a actualizar.
 
   Respuestas:
-    * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
-      con el usuario. El objeto usuario contiene todos los campos de la 
-      tabla Usuarios excepto deleted_at, password y token.
+    200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
+    con el usuario. El objeto usuario contiene todos los campos de la 
+    tabla Usuarios excepto deleted_at, password y token.
 
-    * 404 (Not Found): Si el usuario no existe.
+    404 (Not Found): Si el usuario no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.put("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	if (isEmptyObject(req.body))
@@ -147,7 +147,7 @@ router.put("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: DELETE `/users/:id`
 
   Descripción:
@@ -158,15 +158,15 @@ router.put("/:id", authRoleMiddleware("admin"), async (req, res) => {
     usuario activo para acceder a este endpoint.
 
   Parámetros de consulta:
-    * id: El ID del usuario a eliminar.
+    id: El ID del usuario a eliminar.
 
   Respuestas:
-    * 204 (Not Content): Si la autenticación es exitosa, no retorna ningún
-      valor.
+    204 (Not Content): Si la autenticación es exitosa, no retorna ningún
+  	valor.
 
-    * 404 (Not Found): Si el usuario no existe.
+    404 (Not Found): Si el usuario no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.delete("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	try {
@@ -183,7 +183,7 @@ router.delete("/:id", authRoleMiddleware("admin"), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: POST `/users/signup`
 
   Descripción:
@@ -194,12 +194,12 @@ router.delete("/:id", authRoleMiddleware("admin"), async (req, res) => {
     usuario activo para acceder a este endpoint.
 
   Respuestas:
-    * 201 (Created): Si la autenticación es exitosa, no retorna ningún
-      valor.
+    201 (Created): Si la autenticación es exitosa, no retorna ningún
+    valor.
 
-    * 409 (Conflict): Si el usuario ya existe.
+    409 (Conflict): Si el usuario ya existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.post("/signup", authRoleMiddleware("admin"), async (req, res) => {
 	const { email, password } = req.body;
@@ -224,7 +224,7 @@ router.post("/signup", authRoleMiddleware("admin"), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: POST `/users/authentication`
 
   Descripción:
@@ -235,22 +235,22 @@ router.post("/signup", authRoleMiddleware("admin"), async (req, res) => {
     Sin autenticación.
 
   Parámetros de consulta:
-    * token (obligatorio): El token de autenticación del usuario.
-    * user_id (obligatorio): El ID del usuario que se va a autenticar.
+    token (obligatorio): El token de autenticación del usuario.
+    user_id (obligatorio): El ID del usuario que se va a autenticar.
 
   Respuestas:
-    * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
-      con el usuario. El objeto usuario contiene todos los campos de la 
-      tabla Usuarios excepto deleted_at, password y token.
+    200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
+    con el usuario. El objeto usuario contiene todos los campos de la 
+    tabla Usuarios excepto deleted_at, password y token.
 
-    * 400 (Bad Request): Si el token o el user id no fueron enviados o
-      están vacíos.
+    400 (Bad Request): Si el token o el user id no fueron enviados o
+    están vacíos.
 
-    * 401 (Bad Request): Si el usuario no está activo.
+    401 (Bad Request): Si el usuario no está activo.
 
-    * 404 (Not Found): Si el usuario no existe.
+    404 (Not Found): Si el usuario no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.post("/authentication", async (req, res) => {
 	const { token, user_id } = req.body;
@@ -269,7 +269,7 @@ router.post("/authentication", async (req, res) => {
 		if (!user)
 			return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
 		if (user.token !== token)
-			return res.status(404).json({ message: MESSAGES.USER_UNAUTHORIZED });
+			return res.status(401).json({ message: MESSAGES.USER_UNAUTHORIZED });
 
 		return res.status(200).json({ user: lodash.omit(user.dataValues, "token") });
 	} catch {
@@ -277,7 +277,7 @@ router.post("/authentication", async (req, res) => {
 	}
 });
 
-/** 
+/*
   Endpoint: POST `/login`
 
   Descripción:
@@ -288,22 +288,22 @@ router.post("/authentication", async (req, res) => {
     Sin autenticación.
 
   Parámetros de entrada:
-    * email (obligatorio): String -> El email del usuario.
-    * password (obligatorio): String -> La contraseña del usuario.
+    email (obligatorio): String -> El email del usuario.
+    password (obligatorio): String -> La contraseña del usuario.
 
   Respuestas:
-    * 200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
-      con el usuario y el token generado. El objeto usuario contiene todos 
-      los campos de la tabla Usuarios excepto deleted_at, password y
-      token.
+    200 (OK): Si la autenticación es exitosa, retorna un objeto JSON 
+    con el usuario y el token generado. El objeto usuario contiene todos 
+    los campos de la tabla Usuarios excepto deleted_at, password y
+    token.
 
-    * 400 (Bad Request): Si el email o la contraseña no fueron enviados o
-      están vacíos.
+    400 (Bad Request): Si el email o la contraseña no fueron enviados o
+    están vacíos.
 
-    * 401 (Unauthorized): Si el email no existe, la contraseña es incorrecta o 
-      el usuario no está activo.
+    401 (Unauthorized): Si el email no existe, la contraseña es incorrecta o 
+    el usuario no está activo.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.post("/login", async (req, res) => {
 	const { email, password } = req.body;
@@ -337,7 +337,7 @@ router.post("/login", async (req, res) => {
 	}
 });
 
-/** 
+/*
   Endpoint: POST `/logout`
 
   Descripción:
@@ -347,15 +347,15 @@ router.post("/login", async (req, res) => {
     Sin autenticación.
 
   Parámetros de entrada:
-    * id: El ID del usuario a desloguear.
+    id: El ID del usuario a desloguear.
 
   Respuestas:
-    * 200 (OK): Si la autenticación es exitosa, no retorna ningún
-      valor.
+    200 (OK): Si la autenticación es exitosa, no retorna ningún
+    valor.
 
-    * 404 (Not Found): Si el usuario no existe.
+    404 (Not Found): Si el usuario no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.post("/logout", async (req, res) => {
 	try {

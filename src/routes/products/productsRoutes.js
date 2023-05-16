@@ -15,22 +15,22 @@ const { Products } = require("../../models/connectionsModel");
 const { MESSAGES } = require("../../const/responses");
 const { SETTINGS } = require("../../const/settings");
 
-/**
+/*
   Endpoint: GET `/products`
-
+ 
   Descripción:
     Este endpoint permite obtener una lista de todos los productos 
     registrados en la aplicación.
-  
-	Parámetros de consulta:
-    * page: página que se debe devolver.
+ 
+ 	Parámetros de consulta:
+    page: página que se debe devolver.
 
   Respuestas:
-    * 200 (OK): retorna un objeto JSON con la lista de una página de 
-      productos. El objeto producto contiene todos los campos de la 
-      tabla Productos excepto deleted_at.
+    200 (OK): retorna un objeto JSON con la lista de una página de 
+    productos. El objeto producto contiene todos los campos de la 
+    tabla Productos excepto deleted_at.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/", authLoggedInUser(), async (req, res) => {
 	const page = parseToInt(req.query.page, 1);
@@ -52,7 +52,7 @@ router.get("/", authLoggedInUser(), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: GET `/products/:id`
   
   Descripción:
@@ -60,15 +60,15 @@ router.get("/", authLoggedInUser(), async (req, res) => {
     específico por su ID.
   
   Parámetros de consulta:
-    * id: El ID del producto a buscar.
+    id: El ID del producto a buscar.
 
   Respuestas:
-    * 200 (OK): Retorna un objeto JSON con el producto. El objeto producto 
-      contiene todos los campos de la tabla Producto excepto deleted_at.
+    200 (OK): Retorna un objeto JSON con el producto. El objeto producto 
+    contiene todos los campos de la tabla Producto excepto deleted_at.
 
-    * 404 (Not Found): Si el producto no existe.
+    404 (Not Found): Si el producto no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.get("/:id", authLoggedInUser(), async (req, res) => {
 	try {
@@ -87,7 +87,7 @@ router.get("/:id", authLoggedInUser(), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: PUT `/products/:id`
 
   Descripción:
@@ -95,15 +95,15 @@ router.get("/:id", authLoggedInUser(), async (req, res) => {
     particular a través de su ID.
 
   Parámetros de consulta:
-    * id: El ID del producto a actualizar.
+    id: El ID del producto a actualizar.
 
   Respuestas:
-    * 200 (OK): Retorna un objeto JSON con el producto. El objeto producto
-      contiene todos los campos de la tabla Productos excepto deleted_at.
+    200 (OK): Retorna un objeto JSON con el producto. El objeto producto
+    contiene todos los campos de la tabla Productos excepto deleted_at.
 
-    * 404 (Not Found): Si el producto no existe.
+    404 (Not Found): Si el producto no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.put("/:id", authLoggedInUser(), async (req, res) => {
 	if (isEmptyObject(req.body))
@@ -129,22 +129,22 @@ router.put("/:id", authLoggedInUser(), async (req, res) => {
 	}
 });
 
-/**
+/*
   Endpoint: DELETE `/users/:id`
 
   Descripción:
     Este endpoint permite eliminar un producto específico por su ID.
 
   Parámetros de consulta:
-    * id: El ID del producto a eliminar.
+    id: El ID del producto a eliminar.
 
   Respuestas:
-    * 204 (Not Content): Si la autenticación es exitosa, no retorna ningún
-      valor.
+    204 (Not Content): Si la autenticación es exitosa, no retorna ningún
+    valor.
 
-    * 404 (Not Found): Si el producto no existe.
+    404 (Not Found): Si el producto no existe.
 
-    * 500 (Internal Server Error): Si ocurre un error en el servidor.
+    500 (Internal Server Error): Si ocurre un error en el servidor.
 */
 router.delete("/:id", authLoggedInUser(),  async (req, res) => {
 	try {

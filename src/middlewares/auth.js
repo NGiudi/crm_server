@@ -37,7 +37,6 @@ const authLoggedInUser = () => async (req, res, next) => {
 
 		next();
 	} catch {
-		console.log("error en middleware");
 		return res.status(500).json();
 	}
 };
