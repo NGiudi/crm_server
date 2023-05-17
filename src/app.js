@@ -8,8 +8,8 @@ require("dotenv").config();
 const logger = require("./utils/logger");
 
 /* routes */
-const ProductsRoutes = require("./routes/products/productsRoutes");
-const salesRoutes = require("./routes/sales/salesRoutes");
+const ProductRoutes = require("./routes/product/productRoutes");
+const SaleRoutes = require("./routes/sale/saleRoutes");
 const usersRoutes = require("./routes/users/usersRoutes");
 
 const app = express();
@@ -20,8 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /* routes in use. */
-app.use("/products", new ProductsRoutes().start());
-app.use("/sales", salesRoutes);
+app.use("/products", new ProductRoutes().start());
+app.use("/sales", new SaleRoutes().start());
 app.use("/users", usersRoutes);
 
 /* init listen server in asigned port.*/

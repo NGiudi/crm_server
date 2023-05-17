@@ -2,9 +2,9 @@
 const { authLoggedInUser } = require("../../middlewares/auth");
 
 /* controllers */
-const ProductController = require("../../controllers/productControllers");
+const ProductController = require("../../controllers/productController");
 
-class ProductRouter {
+class ProductRoutes {
 
 	constructor() {
 		this.controller = new ProductController();
@@ -21,4 +21,4 @@ class ProductRouter {
 	}
 }
 
-module.exports = ProductRouter;
+module.exports = ProductRoutes;
