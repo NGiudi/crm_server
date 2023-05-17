@@ -2,9 +2,21 @@
 
 ## CRUD productos
   
-  1. Obtener una página de productos:
+  1. Endpoint: GET `/products`
+	
+		Descripción:
+			Este endpoint permite obtener una lista de todos los productos 
+			registrados en la aplicación.
+	
+		Parámetros de consulta:
+			page: página que se debe devolver.
 
-  Únicamente los usuarios logueados pueden obtener el listado de productos.
+		Respuestas:
+			200 (OK): retorna un objeto JSON con la lista de una página de 
+			productos. El objeto producto contiene todos los campos de la 
+			tabla Productos excepto deleted_at.
+
+			500 (Internal Server Error): Si ocurre un error en el servidor.
 
   ```
     > GET `/products`
@@ -14,18 +26,44 @@
     }
   ```
 
-  2. Obetener la información de un producto:
+  2. Endpoint: GET `/products/:id`
+		
+		Descripción:
+			Este endpoint permite obtener información detallada de un producto 
+			específico por su ID.
+		
+		Parámetros de consulta:
+			id: El ID del producto a buscar.
 
-  Únicamente los usuarios logueados pueden obtener los datos de un producto.
+		Respuestas:
+			200 (OK): Retorna un objeto JSON con el producto. El objeto producto 
+			contiene todos los campos de la tabla Producto excepto deleted_at.
+
+			404 (Not Found): Si el producto no existe.
+
+			500 (Internal Server Error): Si ocurre un error en el servidor.
 
   ```
     > GET `/products/:id`
   ```
   
-  3. Modificar la información de un producto:
+  3. Endpoint: PUT `/products/:id`
 
-  Únicamente los usuarios logueados pueden modificar los datos de un producto.
-    
+		Descripción:
+			Este endpoint te permite actualizar la información de un producto en 
+			particular a través de su ID.
+
+		Parámetros de consulta:
+			id: El ID del producto a actualizar.
+
+		Respuestas:
+			200 (OK): Retorna un objeto JSON con el producto. El objeto producto
+			contiene todos los campos de la tabla Productos excepto deleted_at.
+
+			404 (Not Found): Si el producto no existe.
+
+			500 (Internal Server Error): Si ocurre un error en el servidor.
+
   ```
     > PUT `/products/:id`
   
@@ -36,11 +74,21 @@
     }
   ```
 
-  4. Eliminar un producto:
-  
-  Únicamente los usuarios logueados pueden eliminar un producto.
+  4. Endpoint: DELETE `/users/:id`
 
-  Se hace soft delete para mantener consistencia en la información del sistema de gestión.
+		Descripción:
+			Este endpoint permite eliminar un producto específico por su ID.
+
+		Parámetros de consulta:
+			id: El ID del producto a eliminar.
+
+		Respuestas:
+			204 (Not Content): Si la autenticación es exitosa, no retorna ningún
+			valor.
+
+			404 (Not Found): Si el producto no existe.
+
+			500 (Internal Server Error): Si ocurre un error en el servidor.
 
   ```
     > DELETE `/products/:id`
