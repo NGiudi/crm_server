@@ -1,3 +1,4 @@
+//? Database configuration.
 const Sequilize = require("sequelize");
 
 const sequilize = new Sequilize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {

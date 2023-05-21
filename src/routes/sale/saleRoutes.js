@@ -6,16 +6,16 @@ const SaleController = require("../../controllers/saleController");
 
 class SaleRoutes {
   
-  constructor() {
-    this.controller = new SaleController();
-    this.router = require("express").Router();
-  }
+	constructor() {
+		this.controller = new SaleController();
+		this.router = require("express").Router();
+	}
   
-  start() {
-    this.router.post("/", authLoggedInUser(), this.controller.create);
+	start() {
+		this.router.post("/", authLoggedInUser(), this.controller.create);
     
-    return this.router;
-  }
+		return this.router;
+	}
 }
 
 module.exports = SaleRoutes;
