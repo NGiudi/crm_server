@@ -7,6 +7,7 @@ exports.MESSAGES = {
 	PRODUCT_NOT_FOUND: "product not found",
 	QUERY_BODY_REQUIRED: "the request body must be passed",
 	SALE_CREATED: "sale created successfully",
+	SALE_NOT_FOUND: "sale not found",
 	SALE_REQUIRED_FIELDS: "must send the items",
 	SALE_WITHOUT_STOCK:"products without stock",
 	TOKEN_REQUIRED: "authorization header is required",

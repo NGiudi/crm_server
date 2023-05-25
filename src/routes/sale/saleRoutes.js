@@ -13,7 +13,10 @@ class SaleRoutes {
   
 	start() {
 		this.router.post("/", authLoggedInUser(), this.controller.create);
-    
+		this.router.get("/", authLoggedInUser(), this.controller.getPage);
+		this.router.get("/:id", authLoggedInUser(), this.controller.getOne);
+		//this.router.put("/:id", authLoggedInUser(), this.controller.update);
+		//this.router.delete("/:id", authLoggedInUser(), this.controller.delete);
 		return this.router;
 	}
 }
