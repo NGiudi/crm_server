@@ -5,14 +5,6 @@ module.exports = (sequelize, type) => {
 		brand_name: {
 			type: type.STRING,
 		},
-		createdAt: {
-			field: "created_at",
-			type: type.DATE,
-		},
-		deletedAt: {
-			field: "deleted_at",
-			type: type.DATE,
-		},
 		description: {
 			type: type.STRING, 
 		},
@@ -29,16 +21,15 @@ module.exports = (sequelize, type) => {
 			allowNull: false,
 			type: type.DOUBLE,
 		},
-		updatedAt: {
-			field: "updated_at",
-			type: type.DATE,
-		},
 		stock: {
 			allowNull: false,
 			type: type.INTEGER,
 		},
 	},
 	{
-		paranoid: true
+		createdAt: "created_at",
+		deletedAt: "deleted_at",
+		paranoid: true,
+		updatedAt: "updated_at",
 	});
 };
