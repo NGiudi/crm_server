@@ -1,4 +1,4 @@
-exports.MESSAGES = {
+export const MESSAGES = {
 	AUTH_REQUIRED_FIELDS: "must send the user id and token",
 	INVALID_TOKEN: "invalid token",
 	LOGIN_ERROR: "email or password was not correct",

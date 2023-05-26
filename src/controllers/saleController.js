@@ -1,19 +1,17 @@
 /* utils */
-//const { isEmptyObject } = require("../utils/objects");
-const { getTableStats } = require("../utils/tables");
-const { parseToInt } = require("../utils/numbers");
+import { getTableStats } from "../utils/tables.js";
+import { parseToInt } from "../utils/numbers.js";
 
 /* models */
-const { ProductsSale, Sales } = require("../models/database/tablesConnection");
-const SalesServices = require("../services/SalesServices");
+import { ProductsSale, Sales, Users } from "../models/database/tablesConnection.js";
+import { SalesServices } from "../services/SalesServices.js";
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
-const { SETTINGS } = require("../const/settings");
-const { Users } = require("../models/connectionsModel");
+import { MESSAGES } from "../const/responses.js";
+import { SETTINGS } from "../const/settings.js";
 
 //TODO: crear SaleServices
-class SaleController {
+export class SaleController {
   
 	constructor() {
 		this.services = new SalesServices();
@@ -97,5 +95,3 @@ class SaleController {
 		}
 	};
 }
-
-module.exports = SaleController;

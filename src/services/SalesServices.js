@@ -1,6 +1,6 @@
-const { Sales, Products, ProductsSale } = require("../models/database/tablesConnection");
+import { Sales, Products, ProductsSale } from "../models/database/tablesConnection.js";
 
-class SalesServices {
+export class SalesServices {
 	constructor() {
 
 	}
@@ -42,5 +42,3 @@ class SalesServices {
 		});
 	};
 }
-
-module.exports = SalesServices;

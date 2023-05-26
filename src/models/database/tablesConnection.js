@@ -1,17 +1,19 @@
-const sequelize = require("../../config");
-const Sequelize = require("sequelize");
+import Sequelize from "sequelize";
+
+import { sequelize } from "../../config.js";
 
 /* import models. */
-const productsModel = require("./productsTable");
-const usersModel = require("./usersTable");
-const salesModel = require("./salesTable");
-const productsSaleModel = require("./productsSaleTable");
+import { productsSaleTable } from "./productsSaleTable.js";
+import { productsTable } from "./productsTable.js";
+import { salesTable } from "./salesTable.js";
+import { usersTable } from "./usersTable.js";
 
 /* models connections. */
-const Products = productsModel(sequelize, Sequelize);
-const Users = usersModel(sequelize, Sequelize);
-const Sales = salesModel(sequelize, Sequelize, Users);
-const ProductsSale = productsSaleModel(sequelize, Sequelize, { 
+export const Products = productsTable(sequelize, Sequelize);
+export const Users = usersTable(sequelize, Sequelize);
+export const Sales = salesTable(sequelize, Sequelize, Users);
+
+export const ProductsSale = productsSaleTable(sequelize, Sequelize, { 
 	product: Products,
 	sale: Sales,
 	user: Users,
@@ -20,12 +22,5 @@ const ProductsSale = productsSaleModel(sequelize, Sequelize, {
 /* assosiations.  */
 ProductsSale.belongsTo(Products, {foreignKey: "product_id"});
 ProductsSale.belongsTo(Sales, { foreignKey: "sale_id" });
-Sales.belongsTo(Users, {foreignKey: "seller_id"} );
 
-/* models connections exports. */
-module.exports = {
-	Products,
-	ProductsSale,
-	Sales,
-	Users,
-};
+Sales.belongsTo(Users, {foreignKey: "seller_id"} );

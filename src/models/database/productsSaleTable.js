@@ -1,6 +1,6 @@
-const { TABLES } = require("../../const/tableNames");
+import { TABLES } from "../../const/tableNames.js";
 
-module.exports = (sequelize, type, refs) => {
+export const productsSaleTable = (sequelize, type, refs) => {
 	return sequelize.define(TABLES.PRODUCTS_SALE, {
 		id:{
 			autoIncrement: true,

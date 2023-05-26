@@ -1,10 +1,11 @@
-const jwt = require("jsonwebtoken");
-
 /* models */
-const { Users } = require("../models/database/tablesConnection");
+import { Users } from "../models/database/tablesConnection.js";
+
+/* utils */
+import { decodeToken } from "../utils/token.js";
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
+import { MESSAGES } from "../const/responses.js";
 
 /*
   Middleware: authLoggedInUser
@@ -14,14 +15,14 @@ const { MESSAGES } = require("../const/responses");
     aplicación web. Comprueba si el usuario está activo. También comprueba si el 
     token proporcionado en los encabezados de la solicitud es válido.
 */
-const authLoggedInUser = () => async (req, res, next) => {
+export const authLoggedInUser = () => async (req, res, next) => {
 	const token = req.headers.authorization;
 
 	if (!token)
 		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {
-		const decodedToken = jwt.verify(token,  process.env.JWT_KEY);    
+		const decodedToken = decodeToken(token);
 
 		const user = await Users.findByPk(decodedToken.user_id, {
 			attributes: { 
@@ -50,14 +51,14 @@ const authLoggedInUser = () => async (req, res, next) => {
     ruta y comprueba si el usuario tiene ese rol y si está activo. También comprueba si el 
     token proporcionado en los encabezados de la solicitud es válido.
 */
-const authRoleMiddleware = (role) => async (req, res, next) => {
+export const authRoleMiddleware = (role) => async (req, res, next) => {
 	const token = req.headers.authorization;
 
 	if (!token)
 		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {  
-		const decodedToken = jwt.verify(token,  process.env.JWT_KEY);    
+		const decodedToken = decodeToken(token);   
 
 		const user = await Users.findByPk(decodedToken.user_id, {
 			attributes: { 
@@ -80,9 +81,4 @@ const authRoleMiddleware = (role) => async (req, res, next) => {
 	} catch {
 		return res.status(500).json();
 	}
-};
-
-module.exports = {
-	authLoggedInUser,
-	authRoleMiddleware,	
 };

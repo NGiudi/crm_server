@@ -1,6 +1,6 @@
-const { TABLES } = require("../../const/tableNames");
+import { TABLES } from "../../const/tableNames.js";
 
-module.exports = (sequelize, type) => {
+export const usersTable = (sequelize, type) => {
 	return sequelize.define(TABLES.USERS, {
 		active: {
 			allowNull: false,

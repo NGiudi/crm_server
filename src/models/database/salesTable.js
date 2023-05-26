@@ -1,6 +1,6 @@
-const { TABLES } = require("../../const/tableNames");
+import { TABLES } from "../../const/tableNames.js";
 
-module.exports = (sequelize, type, refModel) => {
+export const salesTable = (sequelize, type, refModel) => {
 	return sequelize.define(TABLES.SALES, {
 		client: {
 			type: type.STRING,

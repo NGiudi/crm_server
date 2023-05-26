@@ -1,4 +1,4 @@
-exports.TABLES = {
+export const TABLES = {
 	PRODUCTS: "products",
 	SALES: "sales", 
 	USERS: "users",
