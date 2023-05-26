@@ -10,9 +10,6 @@ module.exports = (sequelize, type, refs) => {
 			field: "deleted_at",
 			type: type.DATE,
 		},
-		quantity: {
-			type: type.INTEGER, 
-		},
 		id:{
 			autoIncrement: true,
 			primaryKey: true,
@@ -22,16 +19,19 @@ module.exports = (sequelize, type, refs) => {
 			allowNull: false,
 			type: type.DOUBLE,
 		},
-		updatedAt: {
-			field: "updated_at",
-			type: type.DATE,
-		},
 		product_id:{
 			reference: {
 				model: refs.product,
 				key: "id",
 			},
 			type: type.INTEGER,
+		},
+		quantity: {
+			type: type.INTEGER, 
+		},
+		updatedAt: {
+			field: "updated_at",
+			type: type.DATE,
 		},
 		sale_id:{
 			reference: {
