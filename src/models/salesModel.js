@@ -31,11 +31,7 @@ module.exports = (sequelize, type, refModel) => {
 			type: type.INTEGER,
 		},
 		user_id: {
-			references: {
-				model: refModel,
-				key: "id",
-			},
-			type: type.INTEGER,
+			type: type.STRING,
 		},
 	},
 	{
