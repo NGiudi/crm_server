@@ -5,14 +5,6 @@ module.exports = (sequelize, type, refModel) => {
 		client: {
 			type: type.STRING,
 		},
-		createdAt: {
-			field: "created_at",
-			type: type.DATE,
-		},
-		deletedAt: {
-			field: "deleted_at",
-			type: type.DATE,
-		},
 		id:{
 			autoIncrement: true,
 			primaryKey: true,
@@ -21,10 +13,6 @@ module.exports = (sequelize, type, refModel) => {
 		price: {
 			allowNull: false,
 			type: type.DOUBLE,
-		},
-		updatedAt: {
-			field: "updated_at",
-			type: type.DATE,
 		},
 		seller_id:{
 			reference: {
@@ -35,6 +23,9 @@ module.exports = (sequelize, type, refModel) => {
 		},
 	},
 	{
+		createdAt: "created_at",
+		deletedAt: "deleted_at",
 		paranoid: true,
+		updatedAt: "updated_at",
 	});
 };

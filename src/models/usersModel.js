@@ -7,14 +7,6 @@ module.exports = (sequelize, type) => {
 			defaultValue: true,
 			type: type.BOOLEAN,
 		},
-		createdAt: {
-			field: "created_at",
-			type: type.DATE,
-		},
-		deletedAt: {
-			field: "deleted_at",
-			type: type.DATE,
-		},
 		email: {
 			allowNull: false,
 			type: type.STRING,
@@ -46,12 +38,11 @@ module.exports = (sequelize, type) => {
 		token: {
 			type: type.STRING,
 		},
-		updatedAt: {
-			field: "updated_at",
-			type: type.DATE,
-		},
 	},
 	{
-		paranoid: true
+		createdAt: "created_at",
+		deletedAt: "deleted_at",
+		paranoid: true,
+		updatedAt: "updated_at",
 	});
 };
