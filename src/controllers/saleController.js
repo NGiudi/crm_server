@@ -10,6 +10,7 @@ const SalesServices = require("../services/SalesServices");
 /* constants */
 const { MESSAGES } = require("../const/responses");
 const { SETTINGS } = require("../const/settings");
+const { Users } = require("../models/connectionsModel");
 
 //TODO: crear SaleServices
 class SaleController {
@@ -23,6 +24,10 @@ class SaleController {
 
 		try {
 			const sales = await Sales.findAll({
+				include: [{ 
+					model: Users,
+					attributes:["id","names","last_name"]		
+				}],
 				attributes: {
 					exclude: ["deleted_at"],
 				},

@@ -20,6 +20,7 @@ const ProductsSale = productsSaleModel(sequelize, Sequelize, {
 /* assosiations.  */
 ProductsSale.belongsTo(Products, {foreignKey: "product_id"});
 ProductsSale.belongsTo(Sales, { foreignKey: "sale_id" });
+Sales.belongsTo(Users, {foreignKey: "seller_id"} );
 
 /* models connections exports. */
 module.exports = {
