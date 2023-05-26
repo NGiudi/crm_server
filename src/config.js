@@ -1,7 +1,10 @@
 //? Database configuration.
-const Sequilize = require("sequelize");
+import dotenv from "dotenv";
+import Sequelize from "sequelize";
 
-const sequilize = new Sequilize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+dotenv.config();
+
+export const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
 	define: {
 		freezeTableName: true,
 		alter: true
@@ -11,8 +14,6 @@ const sequilize = new Sequilize(process.env.DB_NAME, process.env.DB_USER, proces
 	logging: false
 });
 
-sequilize.sync({force: false})
+sequelize.sync({force: false})
 	.then(() => console.log("Sincronizated table!"))
-	.catch ((error) => console.log(`Table synchronization failed! ${error}`));
-
-module.exports = sequilize;
+	.catch ((err) => console.log(`Table synchronization failed! ${err}`));

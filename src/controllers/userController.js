@@ -1,21 +1,21 @@
-const jwt = require("jsonwebtoken");
-const lodash = require("lodash");
+import lodash from "lodash";
 
 /* utils */
-const { compareEncrypt, hashEncrypt } = require("../utils/encypt");
-const { isEmptyObject } = require("../utils/objects");
-const { getTableStats } = require("../utils/tables");
-const { parseToInt } = require("../utils/numbers");
+import { compareEncrypt, hashEncrypt } from "../utils/encypt.js";
+import { isEmptyObject } from "../utils/objects.js";
+import { getTableStats } from "../utils/tables.js";
+import { parseToInt } from "../utils/numbers.js";
+import { createToken } from "../utils/token.js";
 
 /* models */
-const { Users } = require("../models/connectionsModel");
+import { Users } from "../models/database/tablesConnection.js";
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
-const { SETTINGS } = require("../const/settings");
+import { MESSAGES } from "../const/responses.js";
+import { SETTINGS } from "../const/settings.js";
 
 //TODO: crear UserServices
-class UserController {
+export class UserController {
 	constructor() {
 
 	}
@@ -167,7 +167,7 @@ class UserController {
 			}
       
 			// generate and save a token.
-			user.token = jwt.sign({ user_id: user.id }, process.env.JWT_KEY);
+			user.token = createToken({ user_id: user.id });
 			await user.save();
       
 			res.status(200).json({ user: lodash.omit(user.dataValues, "password") });
@@ -192,5 +192,3 @@ class UserController {
 		}
 	};
 }
-
-module.exports  = UserController;

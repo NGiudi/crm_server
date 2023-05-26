@@ -1,14 +1,16 @@
+import express from "express";
+
 /* middlewares */
-const { authLoggedInUser } = require("../../middlewares/auth");
+import { authLoggedInUser } from "../../middlewares/auth.js";
 
 /* controllers */
-const SaleController = require("../../controllers/saleController");
+import { SaleController } from "../../controllers/saleController.js";
 
-class SaleRoutes {
+export class SaleRoutes {
   
 	constructor() {
 		this.controller = new SaleController();
-		this.router = require("express").Router();
+		this.router = express.Router();
 	}
   
 	start() {
@@ -20,5 +22,3 @@ class SaleRoutes {
 		return this.router;
 	}
 }
-
-module.exports = SaleRoutes;

@@ -1,18 +1,13 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 /* constants */
-const { SETTINGS } = require("../const/settings");
+import { SETTINGS } from "../const/settings.js";
 
-function compareEncrypt(value, hash) {
+export function compareEncrypt(value, hash) {
 	return bcrypt.compareSync(value, hash);
 }
 
-function hashEncrypt(password) {
+export function hashEncrypt(password) {
 	const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(SETTINGS.ENCRYPT_SALT));
 	return hashedPassword;
 }
-
-module.exports = {
-	compareEncrypt,
-	hashEncrypt,
-};
