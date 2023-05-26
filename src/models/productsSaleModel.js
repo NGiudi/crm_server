@@ -40,13 +40,6 @@ module.exports = (sequelize, type, refs) => {
 			},
 			type: type.INTEGER,
 		},
-		seller_id:{
-			reference: {
-				model: refs.user,
-				key: "id",
-			},
-			type: type.INTEGER,
-		}
 	},
 	{
 		paranoid: true

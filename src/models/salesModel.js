@@ -23,6 +23,13 @@ module.exports = (sequelize, type, refModel) => {
 			field: "updated_at",
 			type: type.DATE,
 		},
+		seller_id:{
+			reference: {
+				model: refModel,
+				key: "id",
+			},
+			type: type.INTEGER,
+		},
 		user_id: {
 			references: {
 				model: refModel,
