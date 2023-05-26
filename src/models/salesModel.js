@@ -2,6 +2,9 @@ const { TABLES } = require("../const/tableNames");
 
 module.exports = (sequelize, type, refModel) => {
 	return sequelize.define(TABLES.SALES, {
+		client: {
+			type: type.STRING,
+		},
 		createdAt: {
 			field: "created_at",
 			type: type.DATE,
@@ -29,9 +32,6 @@ module.exports = (sequelize, type, refModel) => {
 				key: "id",
 			},
 			type: type.INTEGER,
-		},
-		user_id: {
-			type: type.STRING,
 		},
 	},
 	{
