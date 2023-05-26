@@ -47,11 +47,12 @@ class SaleController {
 			// });
 
 			const productsSales = await ProductsSale.findAll({
-				// where: { sale_id: req.params.id },
-				// include: Sales
+				include: Sales,
+				where: { sale_id: req.params.id },
 			});
-			if (productsSales){
-				return res.status(200).json(productsSales);
+
+			if (productsSales) {
+				return res.status(200).json({ products: productsSales});
 			}
 				
 			return res.status(404).json({ message: MESSAGES.SALE_NOT_FOUND });  		

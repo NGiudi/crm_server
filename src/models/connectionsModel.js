@@ -10,15 +10,22 @@ const productsSaleModel = require("./productsSaleModel");
 /* models connections. */
 const Products = productsModel(sequelize, Sequelize);
 const Users = usersModel(sequelize, Sequelize);
-
 const Sales = salesModel(sequelize, Sequelize, Users);
-const PorductsSale = productsSaleModel(sequelize, Sequelize, {sale: Sales, product: Products});
+const ProductsSale = productsSaleModel(sequelize, Sequelize, { 
+	product: Products,
+	sale: Sales,
+	user: Users,
+});
+
 /* assosiations.  */
+ProductsSale.belongsTo(Products, {foreignKey: "product_id"});
+ProductsSale.belongsTo(Sales, { foreignKey: "sale_id" });
+ProductsSale.belongsTo(Users, {foreignKey: "seller_id"});
 
 /* models connections exports. */
 module.exports = {
 	Products,
+	ProductsSale,
 	Sales,
 	Users,
-	PorductsSale,
 };
