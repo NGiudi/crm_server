@@ -1,11 +1,11 @@
-const sequelize = require("../config");
+const sequelize = require("../../config");
 const Sequelize = require("sequelize");
 
 /* import models. */
-const productsModel = require("./productsModel");
-const usersModel = require("./usersModel");
-const salesModel = require("./salesModel");
-const productsSaleModel = require("./productsSaleModel");
+const productsModel = require("./productsTable");
+const usersModel = require("./usersTable");
+const salesModel = require("./salesTable");
+const productsSaleModel = require("./productsSaleTable");
 
 /* models connections. */
 const Products = productsModel(sequelize, Sequelize);

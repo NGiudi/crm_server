@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 /* models */
-const { Users } = require("../models/connectionsModel");
+const { Users } = require("../models/database/tablesConnection");
 
 /* constants */
 const { MESSAGES } = require("../const/responses");

@@ -1,24 +1,28 @@
-const { TABLES } = require("../const/tableNames");
+const { TABLES } = require("../../const/tableNames");
 
-module.exports = (sequelize, type, refModel) => {
-	return sequelize.define(TABLES.SALES, {
-		client: {
+module.exports = (sequelize, type) => {
+	return sequelize.define(TABLES.PRODUCTS, {
+		brand_name: {
 			type: type.STRING,
+		},
+		description: {
+			type: type.STRING, 
 		},
 		id:{
 			autoIncrement: true,
 			primaryKey: true,
 			type: type.INTEGER,
 		},
+		name: {
+			allowNull: false,
+			type: type.STRING,
+		},
 		price: {
 			allowNull: false,
 			type: type.DOUBLE,
 		},
-		seller_id:{
-			reference: {
-				model: refModel,
-				key: "id",
-			},
+		stock: {
+			allowNull: false,
 			type: type.INTEGER,
 		},
 	},

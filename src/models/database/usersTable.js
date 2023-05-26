@@ -1,4 +1,4 @@
-const { TABLES } = require("../const/tableNames");
+const { TABLES } = require("../../const/tableNames");
 
 module.exports = (sequelize, type) => {
 	return sequelize.define(TABLES.USERS, {

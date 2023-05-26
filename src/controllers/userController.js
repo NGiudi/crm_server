@@ -8,7 +8,7 @@ const { getTableStats } = require("../utils/tables");
 const { parseToInt } = require("../utils/numbers");
 
 /* models */
-const { Users } = require("../models/connectionsModel");
+const { Users } = require("../models/database/tablesConnection");
 
 /* constants */
 const { MESSAGES } = require("../const/responses");

@@ -4,9 +4,8 @@ const { getTableStats } = require("../utils/tables");
 const { parseToInt } = require("../utils/numbers");
 
 /* models */
-//TODO: ver como sigo desarrollando esta clase.
-const SaleDao = require("../models/DAOs/saleDao");
-const { ProductsSale, Sales } = require("../models/connectionsModel");
+const { ProductsSale, Sales } = require("../models/database/tablesConnection");
+const SalesServices = require("../services/SalesServices");
 
 /* constants */
 const { MESSAGES } = require("../const/responses");
@@ -16,7 +15,7 @@ const { SETTINGS } = require("../const/settings");
 class SaleController {
   
 	constructor() {
-
+		this.services = new SalesServices();
 	}
 
 	getPage = async (req, res) => {
@@ -76,21 +75,19 @@ class SaleController {
 	};
 
 	create = async (req, res) => {
-		const { items } = req.body;
-  
-		if (!items || items.length === 0)
+		const sale = req.body;
+
+		if (!sale || !sale.products || sale.products.length === 0)
 			return res.status(400).json({ message: MESSAGES.SALE_REQUIRED_FIELDS });
-  
+		
+		if (!this.services.allProductsHaveStock(sale.products))
+			return res.status(400).json({ message: MESSAGES.SALE_WITHOUT_STOCK });	
+		
 		try {
-			const sale = new SaleDao();
-      
-			if (sale.createSale(items)) {
-				return res.status(200).json({ message: MESSAGES.SALE_CREATED });
-			}
+			this.services.createSale(sale);
   
-			return res.status(400).json({ message: MESSAGES.SALE_WITHOUT_STOCK });
+			return res.status(200).json({ message: MESSAGES.SALE_CREATED });	
 		} catch (err) {
-			console.error(err);
 			return res.status(500).json();
 		}
 	};
