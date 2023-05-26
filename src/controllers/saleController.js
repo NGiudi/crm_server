@@ -46,7 +46,7 @@ class SaleController {
 			const sales = await Sales.findByPk(req.params.id, {
 			});
 			if (sales) {
-				return res.status(200).json({...sales.dataValues, products: productsSales});
+				return res.status(200).json({ ...sales.dataValues, products: productsSales });
 			}
 				
 			return res.status(404).json({ message: MESSAGES.SALE_NOT_FOUND });  		
@@ -61,9 +61,13 @@ class SaleController {
 				where: { id: req.params.id },
 			});
   
-			if (!sale)
+			if (!sale) {
 				return res.status(404).json({ message: MESSAGES.SALE_NOT_FOUND });
-      
+			} else {
+				await ProductsSale.destroy({
+					where: { sale_id: req.params.id },
+				});
+			}			
 			return res.status(204).json();
 		} catch {
 			return res.status(500).json();
