@@ -2,14 +2,6 @@ const { TABLES } = require("../const/tableNames");
 
 module.exports = (sequelize, type, refs) => {
 	return sequelize.define(TABLES.PRODUCTS_SALE, {
-		createdAt: {
-			field: "created_at",
-			type: type.DATE,
-		},
-		deletedAt: {
-			field: "deleted_at",
-			type: type.DATE,
-		},
 		id:{
 			autoIncrement: true,
 			primaryKey: true,
@@ -29,10 +21,6 @@ module.exports = (sequelize, type, refs) => {
 		quantity: {
 			type: type.INTEGER, 
 		},
-		updatedAt: {
-			field: "updated_at",
-			type: type.DATE,
-		},
 		sale_id:{
 			reference: {
 				model: refs.sale,
@@ -42,6 +30,9 @@ module.exports = (sequelize, type, refs) => {
 		},
 	},
 	{
-		paranoid: true
+		createdAt: "created_at",
+		deletedAt: "deleted_at",
+		paranoid: true,
+		updatedAt: "updated_at",
 	});
 };
