@@ -40,19 +40,13 @@ class SaleController {
 
 	getOne = async (req, res) => {
 		try {
-			// const sale = await Sales.findByPk(req.params.id, {
-			// 	attributes: { 
-			// 		exclude: ["deleted_at"],
-			// 	},
-			// });
-
 			const productsSales = await ProductsSale.findAll({
-				include: Sales,
 				where: { sale_id: req.params.id },
 			});
-
-			if (productsSales) {
-				return res.status(200).json({ products: productsSales});
+			const sales = await Sales.findByPk(req.params.id, {
+			});
+			if (sales) {
+				return res.status(200).json({...sales.dataValues, products: productsSales});
 			}
 				
 			return res.status(404).json({ message: MESSAGES.SALE_NOT_FOUND });  		
