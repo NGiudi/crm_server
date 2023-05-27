@@ -8,7 +8,7 @@ export class ProductModel {
     
 	}
 
-	createProduct = async (body) => {
+	create = async (body) => {
 		const product = await Products.create({
 			brand_name: body.brand_name,
 			description: body.description,
@@ -20,15 +20,25 @@ export class ProductModel {
 		return product;
 	};
 
-	deleteProduct = async (id) => {    
-		const product = await Products.destroy({
+	delete = async (id) => {    
+		const count = await Products.destroy({
 			where: { id },
+		});
+
+		return count;
+	};
+
+	getOne = async (id) => {
+		const product = await Products.findByPk(id, {
+			attributes: {
+				exclude: ["deleted_at"],
+			},
 		});
 
 		return product;
 	};
 
-	getProducts = async (page) => {
+	getPage = async (page) => {
 		const products = await Products.findAll({
 			attributes: {
 				exclude: ["deleted_at"],
@@ -40,18 +50,11 @@ export class ProductModel {
 		return products;
 	};
 
-	getProduct = async (id) => {
-		const product = await Products.findByPk(id, {
-			attributes: {
-				exclude: ["deleted_at"],
-			},
+	update = async (id, modifiedProduct) => {
+		const count = await Products.update(modifiedProduct, {
+			where: { id },
 		});
 
-		return product;
-	};
-
-	updateProduct = async (product) => {
-		product = await product.save();
-		return product;
+		return count;
 	};
 }

@@ -182,9 +182,8 @@ export class UserController {
   
 			if (!user)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
-  
-			// delete token of user id.
-			await user.update({ token: null });
+
+			await user.update({ token: null }); //? delete token of user id.
   
 			return res.status(200).json({ message: MESSAGES.USER_LOGOUT });
 		} catch {

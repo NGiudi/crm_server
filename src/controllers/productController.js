@@ -15,16 +15,14 @@ import { MESSAGES } from "../const/responses.js";
 export class ProductController {
   
 	constructor() {
-		this.service = new ProductService();
+		this.services = new ProductService();
 	}
 
 	create = async (req, res) => {
-		let product = req.body;
-
 		if (isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
-		product = await this.service.createProduct(req.body);
+		const product = await this.services.create(req.body);
 
 		return res.status(201).json(product);
 	};
@@ -33,12 +31,12 @@ export class ProductController {
 		const { id } = req.params;
 
 		if (!id)
-			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_ID });
+			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
 
 		try {
-			const product = await this.service.deleteProduct(id);
+			const count = await this.services.delete(id);
 
-			if (!product)
+			if (count[0] === 0)
 				return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
       
 			return res.status(204).json();
@@ -47,27 +45,14 @@ export class ProductController {
 		}
 	};
 
-	getPage = async (req, res) => {
-		const page = parseToInt(req.query.page, 1);
-
-		try {
-			const products = await this.service.getProducts(page);
-			const stats = await getTableStats(Products, page);
-
-			return res.status(200).json({ products, stats });
-		} catch {
-			res.status(500).json();
-		}
-	};
-
 	getOne = async (req, res) => {
 		const { id } = req.params;
 
 		if (!id)
-			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_ID });
+			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
 
 		try {
-			const product = await this.service.getProduct(id);
+			const product = await this.services.getOne(id);
   
 			if (product)
 				return res.status(200).json(product);
@@ -78,24 +63,35 @@ export class ProductController {
 		}
 	};
 
+	getPage = async (req, res) => {
+		const page = parseToInt(req.query.page, 1);
+
+		try {
+			const products = await this.services.getPage(page);
+			const stats = await getTableStats(Products, page);
+
+			return res.status(200).json({ products, stats });
+		} catch {
+			res.status(500).json();
+		}
+	};
+
 	update = async (req, res) => {
 		const { id } = req.params;
 
 		if (!id)
-			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_ID });
+			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
 
 		if (isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
 
 		try {
-			const product = await this.service.getProduct(id);
-  
-			if (!product)
+			const count = await this.services.update(id, req.body);
+
+			if (count[0] === 0)
 				return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
   
-			this.service.updateProduct(product, req.body);
-
-			return res.json({ product });
+			return res.status(200).json();
 		} catch {
 			return res.status(500).json();
 		}

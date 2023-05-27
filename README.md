@@ -6,6 +6,8 @@ Este repositorio contiene el backend de un sistema de gestión de inventario y v
 
 1. agregarle a los endpoinst una whitelist de campos que se pueden recibir por el body.
 
+2. Los updates y delete pueden modificar o eliminar más de un elemento de una vez, ahora el count solo tiene en cuenta que se elimina 1 elemento. Modificar esto para que soperte multiples eliminaciones correctamente.
+
 ## Features
 
 ### Roles para usuarios

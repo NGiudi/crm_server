@@ -5,30 +5,28 @@ export class ProductService {
 		this.model = new ProductModel();
 	}
 
-	createProduct = async (body) => {
-		const product = this.model.createProduct(body);
+	create = async (body) => {
+		const product = this.model.create(body);
 		return product;
 	};
 
-	deleteProduct = async (id) => {
-		const products = await this.model.deleteProduct(id);
+	delete = async (id) => {
+		const products = await this.model.delete(id);
 		return products;
 	};
 
-	getProducts = async (page) => {
-		const products = await this.model.getProducts(page);
-		return products;
-	};
-
-	getProduct = async(id) => {
-		const product = await this.model.getProduct(id);
+	getOne = async (id) => {
+		const product = await this.model.getOne(id);
 		return product;
 	};
 
-	updateProduct = async(orgProduct, changedProduct) => {
-		Object.assign(orgProduct, changedProduct);
+	getPage = async (page) => {
+		const products = await this.model.getPage(page);
+		return products;
+	};
 
-		const product = await this.model.updateProduct(orgProduct);
+	update = async(id, modifiedProduct) => {
+		const product = await this.model.update(id, modifiedProduct);
 		return product;
 	};
 }
