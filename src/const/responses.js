@@ -5,6 +5,8 @@ export const MESSAGES = {
 	LOGIN_REQUIRED_FIELDS: "must send the email and password",
 	PRODUCT_ID_REQUIRED: "must send the product id",
 	PRODUCT_NOT_FOUND: "product not found",
+	PRODUCT_REQUIRED_FIELDS: "must send body",
+	PRODUCT_REQUIRED_ID: "must send id",
 	QUERY_BODY_REQUIRED: "the request body must be passed",
 	SALE_CREATED: "sale created successfully",
 	SALE_NOT_FOUND: "sale not found",

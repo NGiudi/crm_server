@@ -1,3 +1,6 @@
+/* services */
+import { ProductService } from "../services/ProductService.js";
+
 /* utils */
 import { isEmptyObject } from "../utils/objects.js";
 import { getTableStats }from "../utils/tables.js";
@@ -8,29 +11,49 @@ import { Products } from "../models/database/tablesConnection.js";
 
 /* constants */
 import { MESSAGES } from "../const/responses.js";
-import { SETTINGS } from "../const/settings.js";
 
-//TODO: crear ProductServices;
 export class ProductController {
   
 	constructor() {
-		//TODO: this.service = new ProductServices();
+		this.service = new ProductService();
 	}
+
+	create = async (req, res) => {
+		let product = req.body;
+
+		if (isEmptyObject(req.body))
+			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
+
+		product = await this.service.createProduct(req.body);
+
+		return res.status(201).json(product);
+	};
+
+	delete = async (req, res) => {
+		const { id } = req.params;
+
+		if (!id)
+			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_ID });
+
+		try {
+			const product = await this.service.deleteProduct(id);
+
+			if (!product)
+				return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
+      
+			return res.status(204).json();
+		} catch {
+			return res.status(500).json();
+		}
+	};
 
 	getPage = async (req, res) => {
 		const page = parseToInt(req.query.page, 1);
 
 		try {
-			const products = await Products.findAll({
-				attributes: {
-					exclude: ["deleted_at"],
-				},
-				limit: SETTINGS.PAGE_LIMIT,
-				offset: (page - 1) * SETTINGS.PAGE_LIMIT,
-			});
-  
+			const products = await this.service.getProducts(page);
 			const stats = await getTableStats(Products, page);
-  
+
 			return res.status(200).json({ products, stats });
 		} catch {
 			res.status(500).json();
@@ -38,12 +61,13 @@ export class ProductController {
 	};
 
 	getOne = async (req, res) => {
+		const { id } = req.params;
+
+		if (!id)
+			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_ID });
+
 		try {
-			const product = await Products.findByPk(req.params.id, {
-				attributes: { 
-					exclude: ["deleted_at"],
-				},
-			});
+			const product = await this.service.getProduct(id);
   
 			if (product)
 				return res.status(200).json(product);
@@ -55,39 +79,23 @@ export class ProductController {
 	};
 
 	update = async (req, res) => {
+		const { id } = req.params;
+
+		if (!id)
+			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_ID });
+
 		if (isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
-  
-		try {
-			const product = await Products.findByPk(req.params.id, {
-				attributes: { 
-					exclude: ["deleted_at"],
-				},
-			});
-  
-			if (!product)
-				return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
-  
-			// update product fields.
-			Object.assign(product, req.body);
-			await product.save();
-  
-			return res.json({ product });
-		} catch {
-			return res.status(500).json();
-		}
-	};
 
-	delete = async (req, res) => {
 		try {
-			const product = await Products.destroy({
-				where: { id: req.params.id },
-			});
+			const product = await this.service.getProduct(id);
   
 			if (!product)
 				return res.status(404).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
-      
-			return res.status(204).json();
+  
+			this.service.updateProduct(product, req.body);
+
+			return res.json({ product });
 		} catch {
 			return res.status(500).json();
 		}
