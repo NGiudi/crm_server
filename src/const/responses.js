@@ -1,9 +1,7 @@
 export const MESSAGES = {
-	AUTH_REQUIRED_FIELDS: "must send the user id and token",
 	ID_REQUIRED: "must send id",
 	INVALID_TOKEN: "invalid token",
 	LOGIN_ERROR: "email or password was not correct",
-	LOGIN_REQUIRED_FIELDS: "must send the email and password",
 	PRODUCT_ID_REQUIRED: "must send the product id",
 	PRODUCT_NOT_FOUND: "product not found",
 	PRODUCT_REQUIRED_FIELDS: "must send body",

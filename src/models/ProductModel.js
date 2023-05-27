@@ -18,7 +18,7 @@ export class ProductModel {
 		});
 
 		return product;
-	};
+	}
 
 	delete = async (id) => {    
 		const count = await Products.destroy({
@@ -26,7 +26,7 @@ export class ProductModel {
 		});
 
 		return count;
-	};
+	}
 
 	getOne = async (id) => {
 		const product = await Products.findByPk(id, {
@@ -36,7 +36,7 @@ export class ProductModel {
 		});
 
 		return product;
-	};
+	}
 
 	getPage = async (page) => {
 		const products = await Products.findAll({
@@ -48,7 +48,7 @@ export class ProductModel {
 		});
 
 		return products;
-	};
+	}
 
 	update = async (id, modifiedProduct) => {
 		const count = await Products.update(modifiedProduct, {
@@ -56,5 +56,5 @@ export class ProductModel {
 		});
 
 		return count;
-	};
+	}
 }

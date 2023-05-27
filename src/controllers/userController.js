@@ -1,7 +1,7 @@
 import lodash from "lodash";
 
 /* utils */
-import { compareEncrypt, hashEncrypt } from "../utils/encypt.js";
+import { compareEncrypt } from "../utils/encypt.js";
 import { isEmptyObject } from "../utils/objects.js";
 import { getTableStats } from "../utils/tables.js";
 import { parseToInt } from "../utils/numbers.js";
@@ -10,84 +10,66 @@ import { createToken } from "../utils/token.js";
 /* models */
 import { Users } from "../models/database/tablesConnection.js";
 
+/* service */
+import { UserService } from "../services/UserService.js";
+
 /* constants */
 import { MESSAGES } from "../const/responses.js";
-import { SETTINGS } from "../const/settings.js";
 
-//TODO: crear UserServices
 export class UserController {
 	constructor() {
-
+		this.services = new UserService();
 	}
 
-	getPage = async (req, res) => {
-		const page = parseToInt(req.query.page, 1);
+	authentication = async (req, res) => {
+		const { token, user_id } = req.body;
+    
+		if (isEmptyObject(req.body))
+			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
   
 		try {
-			const users = await Users.findAll({
-				attributes: {
-					exclude: ["deleted_at", "password", "token"],
-				},
-				limit: SETTINGS.PAGE_LIMIT,
-				offset: (page - 1) * SETTINGS.PAGE_LIMIT,
-			});
+			const user = await this.services.getOne(req.body.user_id);
+			  
+			if (!user)
+				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
+			
+			if (user.token !== token)
+				return res.status(401).json({ message: MESSAGES.USER_UNAUTHORIZED });
   
-			const stats = await getTableStats(Users, page);
-  
-			return res.status(200).json({ stats, users });
-		} catch {
-			res.status(500).json();
-		}
-	};
-
-	getOne = async (req, res) => {
-		try {
-			const user = await Users.findByPk(req.params.id, {
-				attributes: { 
-					exclude: ["deleted_at", "password", "token"],
-				},
-			});
-  
-			if (user)
-				return res.status(200).json(user);
-  
-			return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });  
+			return res.status(200).json({ user });
 		} catch {
 			return res.status(500).json();
 		}
 	};
 
-	update = async (req, res) => {
+	create = async (req, res) => {
 		if (isEmptyObject(req.body))
-			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
-  
+			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
+
 		try {
-			const user = await Users.findByPk(req.params.id, {
-				attributes: { 
-					exclude: ["deleted_at", "password", "token"],
-				},
-			});
-  
-			if (!user)
-				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
-  
-			// update user fields.
-			Object.assign(user, req.body);
-			await user.save();
-  
-			return res.json({ user });
+			const existingUser = await this.services.getOneByParam({ email: req.body.email });
+      
+			if (existingUser)
+				return res.status(409).json({ message: MESSAGES.USER_EXIST });
+			
+			const user = await this.services.create(req.body);
+			  
+			return res.status(201).json(user);
 		} catch {
 			return res.status(500).json();
 		}
 	};
 
 	delete = async (req, res) => {
+		const { id } = req.params;
+
+		if (!id)
+			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
+
 		try {
-			const user = await Users.destroy({ 
-				where: { id: req.params.id },
-			});
+			const count = await this.services.delete(id);
   
-			if (!user)
+			if (count[0] === 0)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
       
 			return res.status(204).json();
@@ -96,75 +78,56 @@ export class UserController {
 		}
 	};
 
-	signup = async (req, res) => {
-		const { email, password } = req.body;
-  
-		try {
-			// check if the user already exists in the database.
-			const existingUser = await Users.findOne({ where: { email }});
-      
-			if (existingUser)
-				return res.status(409).json({ message: MESSAGES.USER_EXIST });
-  
-			// encrypt the user's password before storing it in the database.
-			const hashedPassword = hashEncrypt(password);
-  
-			// create a new user.
-			const newUser = new Users({ ...req.body, password: hashedPassword });
-			await newUser.save();
-  
-			return res.status(201).json({ message: MESSAGES.USER_CREATED });
-		} catch {
-			return res.status(500).json();
-		}
-	};
+	getOne = async (req, res) => {
+		const { id } = req.params;
 
-	authentication = async (req, res) => {
-		const { token, user_id } = req.body;
-    
-		if (!token || !user_id)
-			return res.status(400).json({ message: MESSAGES.AUTH_REQUIRED_FIELDS });
-  
+		if (!id)
+			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
+
 		try {
-			//? search for the user in the database using the provided id.
-			const user = await Users.findByPk(user_id, {
-				attributes: { 
-					exclude: ["deleted_at", "password"],
-				},
-			});
+			const user = await this.services.getOne(id);
   
 			if (!user)
-				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
-			if (user.token !== token)
-				return res.status(401).json({ message: MESSAGES.USER_UNAUTHORIZED });
-  
-			return res.status(200).json({ user: lodash.omit(user.dataValues, "token") });
+				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });  
+			
+			return res.status(200).json(user);
 		} catch {
 			return res.status(500).json();
 		}
 	};
 
-	login = async (req, res) => {
-		const { email, password } = req.body;
+	getPage = async (req, res) => {
+		const page = parseToInt(req.query.page, 1);
   
-		if (!email || !password)
-			return res.status(400).json({ message: MESSAGES.LOGIN_REQUIRED_FIELDS });
-    
+		try {
+			const users = await this.services.getPage(page);  
+			const stats = await getTableStats(Users, page);
+  
+			return res.status(200).json({ stats, users });
+		} catch {
+			res.status(500).json();
+		}
+	};
+
+	//TODO: separar este método en services y model.
+	login = async (req, res) => {		
+		if (isEmptyObject(req.body))
+			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
+
 		try {
 			const user = await Users.findOne({ 
 				attributes: { 
 					exclude: ["deleted_at"],
 				},
-				where: { email },
+				where: { email: req.body.email },
 			});
     
 			if (!user)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
     
 			// check if the password is valid.
-			if (!compareEncrypt(password, user.password)) {
+			if (!compareEncrypt(req.body.password, user.password))
 				return res.status(401).json({ message: MESSAGES.LOGIN_ERROR });
-			}
       
 			// generate and save a token.
 			user.token = createToken({ user_id: user.id });
@@ -178,14 +141,33 @@ export class UserController {
 
 	logout = async (req, res) => {
 		try {
-			const user = await Users.findByPk(req.body.user_id);
+			const count = await this.services.update(req.body.user_id, { token: null });
   
-			if (!user)
+			if (count[0] === 0)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
 
-			await user.update({ token: null }); //? delete token of user id.
+		 	return res.status(200).json({ message: MESSAGES.USER_LOGOUT });
+		} catch {
+			return res.status(500).json();
+		}
+	};
+
+	update = async (req, res) => {
+		const { id } = req.params;
+
+		if (!id)
+			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
+
+		if (isEmptyObject(req.body))
+			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
+
+		try {
+			const count = this.services.update(id, req.body);
   
-			return res.status(200).json({ message: MESSAGES.USER_LOGOUT });
+			if (count[0] === 0)
+				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
+  
+			return res.status(200).json();
 		} catch {
 			return res.status(500).json();
 		}

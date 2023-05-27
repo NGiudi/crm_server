@@ -26,7 +26,7 @@ export class ProductService {
 	};
 
 	update = async(id, modifiedProduct) => {
-		const product = await this.model.update(id, modifiedProduct);
-		return product;
+		const count = await this.model.update(id, modifiedProduct);
+		return count;
 	};
 }

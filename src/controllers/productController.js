@@ -22,9 +22,12 @@ export class ProductController {
 		if (isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
-		const product = await this.services.create(req.body);
-
-		return res.status(201).json(product);
+		try {
+			const product = await this.services.create(req.body);
+			return res.status(201).json(product);
+		} catch {
+			return res.status(500).json();
+		}
 	};
 
 	delete = async (req, res) => {
