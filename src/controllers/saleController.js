@@ -3,7 +3,7 @@ import { getTableStats } from "../utils/tables.js";
 import { parseToInt } from "../utils/numbers.js";
 
 /* models */
-import { ProductsSale, Sales, Users } from "../models/database/tablesConnection.js";
+import { Products, ProductsSale, Sales, Users } from "../models/database/tablesConnection.js";
 import { SalesServices } from "../services/SalesServices.js";
 
 /* constants */
@@ -42,10 +42,18 @@ export class SaleController {
 
 	getOne = async (req, res) => {
 		try {
-			const productsSales = await ProductsSale.findAll({
+			const productsSales = await ProductsSale.findAll({	
 				where: { sale_id: req.params.id },
+				include: [{ 
+					model: Products,
+					attributes:["id","brand_name","name","description","price"]		
+				}],
 			});
 			const sales = await Sales.findByPk(req.params.id, {
+				include: [{ 
+					model: Users,
+					attributes:["id","names","last_name"]		
+				}],
 			});
 			if (sales) {
 				return res.status(200).json({ ...sales.dataValues, products: productsSales });
