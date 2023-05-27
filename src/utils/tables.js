@@ -1,7 +1,7 @@
 /* constants */
-const { SETTINGS } = require("../const/settings");
+import { SETTINGS } from "../const/settings.js";
 
-async function getTableStats(model, page, options) {
+export async function getTableStats(model, page, options) {
 	const totalUsers = await model.count(options);
 
 	return {
@@ -10,8 +10,3 @@ async function getTableStats(model, page, options) {
 		total: totalUsers,
 	};
 }
-
-
-module.exports = {
-	getTableStats,
-};

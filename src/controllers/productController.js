@@ -1,17 +1,17 @@
 /* utils */
-const { isEmptyObject } = require("../utils/objects");
-const { getTableStats } = require("../utils/tables");
-const { parseToInt } = require("../utils/numbers");
+import { isEmptyObject } from "../utils/objects.js";
+import { getTableStats }from "../utils/tables.js";
+import { parseToInt } from "../utils/numbers.js";
 
 /* models */
-const { Products } = require("../models/connectionsModel");
+import { Products } from "../models/database/tablesConnection.js";
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
-const { SETTINGS } = require("../const/settings");
+import { MESSAGES } from "../const/responses.js";
+import { SETTINGS } from "../const/settings.js";
 
 //TODO: crear ProductServices;
-class ProductController {
+export class ProductController {
   
 	constructor() {
 		//TODO: this.service = new ProductServices();
@@ -93,5 +93,3 @@ class ProductController {
 		}
 	};
 }
-
-module.exports = ProductController;

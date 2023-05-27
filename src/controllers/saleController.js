@@ -1,23 +1,20 @@
 /* utils */
-//const { isEmptyObject } = require("../utils/objects");
-const { getTableStats } = require("../utils/tables");
-const { parseToInt } = require("../utils/numbers");
+import { getTableStats } from "../utils/tables.js";
+import { parseToInt } from "../utils/numbers.js";
 
 /* models */
-//TODO: ver como sigo desarrollando esta clase.
-const SaleDao = require("../models/DAOs/saleDao");
-const { ProductsSale, Sales, Products } = require("../models/connectionsModel");
+import { Products, ProductsSale, Sales, Users } from "../models/database/tablesConnection.js";
+import { SalesServices } from "../services/SalesServices.js";
 
 /* constants */
-const { MESSAGES } = require("../const/responses");
-const { SETTINGS } = require("../const/settings");
-const { Users } = require("../models/connectionsModel");
+import { MESSAGES } from "../const/responses.js";
+import { SETTINGS } from "../const/settings.js";
 
 //TODO: crear SaleServices
-class SaleController {
+export class SaleController {
   
 	constructor() {
-
+		this.services = new SalesServices();
 	}
 
 	getPage = async (req, res) => {
@@ -89,24 +86,20 @@ class SaleController {
 	};
 
 	create = async (req, res) => {
-		const { items } = req.body;
-  
-		if (!items || items.length === 0)
+		const sale = req.body;
+
+		if (!sale || !sale.products || sale.products.length === 0)
 			return res.status(400).json({ message: MESSAGES.SALE_REQUIRED_FIELDS });
-  
+		
+		if (!this.services.allProductsHaveStock(sale.products))
+			return res.status(400).json({ message: MESSAGES.SALE_WITHOUT_STOCK });	
+		
 		try {
-			const sale = new SaleDao();
-      
-			if (sale.createSale(items)) {
-				return res.status(200).json({ message: MESSAGES.SALE_CREATED });
-			}
+			this.services.createSale(sale);
   
-			return res.status(400).json({ message: MESSAGES.SALE_WITHOUT_STOCK });
+			return res.status(200).json({ message: MESSAGES.SALE_CREATED });	
 		} catch (err) {
-			console.error(err);
 			return res.status(500).json();
 		}
 	};
 }
-
-module.exports = SaleController;

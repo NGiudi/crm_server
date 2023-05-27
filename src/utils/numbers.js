@@ -1,4 +1,4 @@
-function parseToInt(string, defaultValue = 0) {
+export function parseToInt(string, defaultValue = 0) {
 	let number = parseInt(string);
 
 	if (isNaN(number)) {
@@ -7,7 +7,3 @@ function parseToInt(string, defaultValue = 0) {
 
 	return number;
 }
-
-module.exports = {
-	parseToInt,
-};

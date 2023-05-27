@@ -1,11 +1,13 @@
-const express = require("express");
-const cors = require("cors");
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
 
-require("dotenv").config();
+dotenv.config();
+
 /* routes */
-const ProductRoutes = require("./routes/product/productRoutes");
-const SaleRoutes = require("./routes/sale/saleRoutes");
-const UserRoutes = require("./routes/user/userRoutes");
+import { ProductRoutes } from "./routes/product/productRoutes.js";
+import { SaleRoutes } from "./routes/sale/saleRoutes.js";
+import { UserRoutes } from "./routes/user/userRoutes.js";
 
 const app = express();
 
@@ -19,8 +21,8 @@ app.use("/sales", new SaleRoutes().start());
 app.use("/users", new UserRoutes().start());
 
 /* init listen server in asigned port.*/
-const port = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3005;
 
-app.listen(port, () => {
-	console.log(`Server runing in port ${port}...`);
+app.listen(PORT, () => {
+	console.log(`Server runing in port ${PORT}...`);
 });

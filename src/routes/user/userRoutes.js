@@ -1,14 +1,16 @@
+import express from "express";
+
 /* middlewares */
-const { authRoleMiddleware } = require("../../middlewares/auth");
+import { authRoleMiddleware } from "../../middlewares/auth.js";
 
 /* controllers */
-const UserController = require("../../controllers/userController");
+import { UserController } from "../../controllers/userController.js";
 
-class UserRoutes {
+export class UserRoutes {
 
 	constructor() {
 		this.controller = new UserController();
-		this.router = require("express").Router();
+		this.router = express.Router();
 	}
 
 	start() {
@@ -16,6 +18,7 @@ class UserRoutes {
 		this.router.get("/:id", authRoleMiddleware("admin"), this.controller.getOne);
 		this.router.put("/:id", authRoleMiddleware("admin"), this.controller.update);
 		this.router.delete("/:id", authRoleMiddleware("admin"), this.controller.delete);
+		
 		this.router.post("/signup", authRoleMiddleware("admin"), this.controller.signup );
 		this.router.post("/authentication", this.controller.authentication);
 		this.router.post("/login", this.controller.login);
@@ -24,5 +27,3 @@ class UserRoutes {
 		return this.router;
 	}
 }
-
-module.exports = UserRoutes;
