@@ -22,10 +22,12 @@ export class SaleController {
 			return res.status(400).json({ message: MESSAGES.SALE_REQUIRED_FIELDS });
 				
 		try {
-			if (!this.services.allProductsHaveStock(sale.products))
+			const haveStock = await this.services.allProductsHaveStock(sale.products);
+
+			if (!haveStock)
 				return res.status(400).json({ message: MESSAGES.SALE_WITHOUT_STOCK });
 
-			const newSale = await this.services.createSale(sale);
+			const newSale = await this.services.create(sale);
   
 			return res.status(201).json(newSale);	
 		} catch {

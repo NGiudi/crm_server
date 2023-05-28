@@ -35,7 +35,7 @@ export class SaleService {
 
 	//TODO: Lo más correcto es obtener el precio de los productos desde el back.
 	// y no obtenerlo desde el front como estamos haciendo ahora.
-	createSale = async (body) => {
+	create = async (body) => {
 		let sale = lodash.pick(body, ["client", "seller_id"]);
 	
 		sale.price = this.#calculateTotalPrice(body.products);
