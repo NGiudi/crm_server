@@ -23,12 +23,18 @@ export class UserModel {
     return count;
   }
 
-  getOne = async (id) => {
-    const user = await Users.findByPk(id, {
+  getOne = async (filter) => {
+    const baseQuery = {
       attributes: { 
-        exclude: ["deleted_at", "password"],
+        exclude: ["deleted_at"],
       },
-    });
+    };
+
+    if (filter) {
+      baseQuery.where = filter;
+    }
+
+    const user = await Users.findOne(baseQuery);
 
     return user;
   }

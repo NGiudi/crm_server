@@ -2,6 +2,7 @@
 import { UserModel } from "../models/UserModel.js";
 
 /* utils */
+import { createToken } from "../utils/token.js";
 import { hashEncrypt } from "../utils/encypt.js";
 
 export class UserService {
@@ -21,8 +22,14 @@ export class UserService {
     return count;
   }
 
-  getOne = async (id) => {
-    const user = await this.model.getOne(id);
+  generateToken = async (user) => {
+    user.token = createToken({ user_id: user.id });
+		const newUser = this.model.update(user.id, { token: user.token });
+    return newUser;
+  }
+
+  getOne = async (id, filter) => {
+    const user = await this.model.getOne(id, filter);
     return user;
   }
 

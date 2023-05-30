@@ -5,7 +5,6 @@ import { compareEncrypt } from "../utils/encypt.js";
 import { isEmptyObject } from "../utils/objects.js";
 import { getTableStats } from "../utils/tables.js";
 import { parseToInt } from "../utils/numbers.js";
-import { createToken } from "../utils/token.js";
 
 /* models */
 import { Users } from "../models/database/tablesConnection.js";
@@ -28,7 +27,7 @@ export class UserController {
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
   
 		try {
-			const user = await this.services.getOne(req.body.user_id);
+			const user = await this.services.getOne({ id: req.body.user_id });
 			  
 			if (!user)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
@@ -85,7 +84,7 @@ export class UserController {
 			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
 
 		try {
-			const user = await this.services.getOne(id);
+			const user = await this.services.getOne({ id });
   
 			if (!user)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });  
@@ -109,18 +108,12 @@ export class UserController {
 		}
 	};
 
-	//TODO: separar este método en services y model.
 	login = async (req, res) => {		
 		if (isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
 		try {
-			const user = await Users.findOne({ 
-				attributes: { 
-					exclude: ["deleted_at"],
-				},
-				where: { email: req.body.email },
-			});
+			const user = await this.services.getOne({ email: req.body.email });
     
 			if (!user)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
@@ -129,9 +122,7 @@ export class UserController {
 			if (!compareEncrypt(req.body.password, user.password))
 				return res.status(401).json({ message: MESSAGES.LOGIN_ERROR });
       
-			// generate and save a token.
-			user.token = createToken({ user_id: user.id });
-			await user.save();
+			this.services.generateToken(user);
       
 			res.status(200).json({ user: lodash.omit(user.dataValues, "password") });
 		} catch {
