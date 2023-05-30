@@ -1,3 +1,5 @@
+import { Sequelize } from "sequelize";
+
 import { Products } from "../models/database/tablesConnection.js";
 
 /* constants */
@@ -38,13 +40,20 @@ export class ProductModel {
 		return product;
 	}
 
-	getPage = async (page) => {
+	getPage = async (params) => {
+		const { page, q } = params;
+
 		const products = await Products.findAll({
 			attributes: {
 				exclude: ["deleted_at"],
 			},
 			limit: SETTINGS.PAGE_LIMIT,
 			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
+			where: {
+        description: {
+          [Sequelize.Op.like]: q ? `%${q}%` : '%',
+        },
+      }
 		});
 
 		return products;

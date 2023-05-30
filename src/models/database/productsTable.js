@@ -8,6 +8,11 @@ export const productsTable = (sequelize, type) => {
 		description: {
 			type: type.STRING, 
 		},
+		discount: {
+			allowNull: true,
+			defaultValue: 0,
+			type: type.STRING,
+		},
 		id:{
 			autoIncrement: true,
 			primaryKey: true,
@@ -21,8 +26,14 @@ export const productsTable = (sequelize, type) => {
 			allowNull: false,
 			type: type.DOUBLE,
 		},
+		stock_reserved: {
+			allowNull: true,
+			defaultValue: 0,
+			type: type.INTEGER,
+		},
 		stock: {
 			allowNull: false,
+			defaultValue: 0,
 			type: type.INTEGER,
 		},
 	},

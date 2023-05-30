@@ -20,8 +20,8 @@ export class ProductService {
 		return product;
 	};
 
-	getPage = async (page) => {
-		const products = await this.model.getPage(page);
+	getPage = async (params) => {
+		const products = await this.model.getPage(params);
 		return products;
 	};
 

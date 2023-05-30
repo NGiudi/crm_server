@@ -68,9 +68,14 @@ export class ProductController {
 
 	getPage = async (req, res) => {
 		const page = parseToInt(req.query.page, 1);
+		
+		const params = {
+			page,
+			q: req.query.q || null,
+		}
 
 		try {
-			const products = await this.services.getPage(page);
+			const products = await this.services.getPage(params);
 			const stats = await getTableStats(Products, page);
 
 			return res.status(200).json({ products, stats });

@@ -14,7 +14,7 @@ export const salesTable = (sequelize, type, refModel) => {
 			allowNull: false,
 			type: type.DOUBLE,
 		},
-		seller_id:{
+		seller_id: {
 			reference: {
 				model: refModel,
 				key: "id",
