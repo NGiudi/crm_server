@@ -21,8 +21,6 @@ export class UserController {
 	}
 
 	authentication = async (req, res) => {
-		const { token, user_id } = req.body;
-    
 		if (isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
   
@@ -32,7 +30,7 @@ export class UserController {
 			if (!user)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
 			
-			if (user.token !== token)
+			if (user.token !== req.body.token)
 				return res.status(401).json({ message: MESSAGES.USER_UNAUTHORIZED });
   
 			return res.status(200).json({ user });

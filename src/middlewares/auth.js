@@ -8,6 +8,38 @@ import { decodeToken } from "../utils/token.js";
 import { MESSAGES } from "../const/responses.js";
 
 /*
+  Middleware: authActiveUser
+
+  Descripción:
+    Este middleware es utilizado para autenticar y autorizar a los usuarios de una 
+    aplicación web. Comprueba si el usuario está activo.
+*/
+
+export const authActiveUser = () => async (req, res, next) => {
+	if (!req.body || !req.body.email)
+		return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
+
+	try {
+		const user = await Users.findOne({
+			attributes: { 
+				include: ["token", "role"],
+			},
+			where: { email: req.body.email},
+		});
+
+		if (!user)
+			return res.status(401).json({ message: MESSAGES.USER_NOT_FOUND });
+
+		if (!user.active)
+			return res.status(401).json({ message: MESSAGES.USER_INACTIVE });
+		
+		next();
+	} catch {
+		return res.status(500).json();
+	}
+};
+
+/*
   Middleware: authLoggedInUser
 
   Descripción:
