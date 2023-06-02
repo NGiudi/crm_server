@@ -16,17 +16,27 @@ import { MESSAGES } from "../const/responses.js";
 */
 
 export const authActiveUser = () => async (req, res, next) => {
-	if (!req.body || !req.body.email)
+	if (!req.body || (!req.body.email && !req.body.user_id))
 		return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
 
-	try {
-		const user = await Users.findOne({
-			attributes: { 
-				include: ["token", "role"],
-			},
-			where: { email: req.body.email},
-		});
+	let user = null;
 
+	try {
+		if (req.body.email) {
+			user = await Users.findOne({
+				attributes: { 
+					include: ["token", "role"],
+				},
+				where: { email: req.body.email},
+			});
+		} else if (req.body.user_id) {
+			user = await Users.findByPk(req.body.user_id, {
+				attributes: { 
+					include: ["token", "role"],
+				}
+			});
+		}
+		
 		if (!user)
 			return res.status(401).json({ message: MESSAGES.USER_NOT_FOUND });
 

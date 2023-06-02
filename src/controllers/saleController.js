@@ -25,7 +25,7 @@ export class SaleController {
 			const haveStock = await this.services.allProductsHaveStock(sale.products);
 
 			if (!haveStock)
-				return res.status(400).json({ message: MESSAGES.SALE_WITHOUT_STOCK });
+				return res.status(422).json({ message: MESSAGES.SALE_WITHOUT_STOCK });
 
 			const newSale = await this.services.create(sale);
   

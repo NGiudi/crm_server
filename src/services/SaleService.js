@@ -15,6 +15,9 @@ export class SaleService {
 	}
 
 	async #haveProductStock(product) {
+		if (product.quantity <= 0)
+			return false;
+
 		const p = await Products.findByPk(product.product_id, {
 			attributes: ["id", "stock"],
 		});
