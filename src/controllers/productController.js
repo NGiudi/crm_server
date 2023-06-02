@@ -1,16 +1,7 @@
-/* services */
-import { ProductService } from "../services/ProductService.js";
-
-/* utils */
-import { isEmptyObject } from "../utils/objects.js";
-import { getTableStats }from "../utils/tables.js";
-import { parseToInt } from "../utils/numbers.js";
-
-/* models */
 import { Products } from "../models/database/tablesConnection.js";
-
-/* constants */
+import { ProductService } from "../services/ProductService.js";
 import { MESSAGES } from "../const/responses.js";
+import { Utils } from "../utils/index.js";
 
 export class ProductController {
   
@@ -19,7 +10,7 @@ export class ProductController {
 	}
 
 	create = async (req, res) => {
-		if (isEmptyObject(req.body))
+		if (Utils.objects.isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
 		try {
@@ -67,7 +58,7 @@ export class ProductController {
 	};
 
 	getPage = async (req, res) => {
-		const page = parseToInt(req.query.page, 1);
+		const page = Utils.numbers.parseToInt(req.query.page, 1);
 		
 		const params = {
 			page,
@@ -76,7 +67,7 @@ export class ProductController {
 
 		try {
 			const products = await this.services.getPage(params);
-			const stats = await getTableStats(Products, page);
+			const stats = await Utils.tables.getTableStats(Products, page);
 
 			return res.status(200).json({ products, stats });
 		} catch {
@@ -90,7 +81,7 @@ export class ProductController {
 		if (!id)
 			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
 
-		if (isEmptyObject(req.body))
+		if (Utils.objects.isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
 
 		try {

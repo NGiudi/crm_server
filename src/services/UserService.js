@@ -1,9 +1,5 @@
-/* models */
 import { UserModel } from "../models/UserModel.js";
-
-/* utils */
-import { createToken } from "../utils/token.js";
-import { hashEncrypt } from "../utils/encypt.js";
+import { Utils } from "../utils/index.js";
 
 export class UserService {
   
@@ -12,7 +8,7 @@ export class UserService {
   }
 
   create = async (body) => {
-    const hashedPassword = hashEncrypt(body.password);
+    const hashedPassword = Utils.tokens.hashEncrypt(body.password);
     const user = await this.model.create({ ...body, password: hashedPassword });
     return user;
   }
@@ -23,7 +19,7 @@ export class UserService {
   }
 
   generateToken = async (user) => {
-    user.token = createToken({ user_id: user.id });
+    user.token = Utils.tokens.createToken({ user_id: user.id });
 		const newUser = this.model.update(user.id, { token: user.token });
     return newUser;
   }

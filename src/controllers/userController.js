@@ -1,19 +1,9 @@
 import lodash from "lodash";
 
-/* utils */
-import { compareEncrypt } from "../utils/encypt.js";
-import { isEmptyObject } from "../utils/objects.js";
-import { getTableStats } from "../utils/tables.js";
-import { parseToInt } from "../utils/numbers.js";
-
-/* models */
 import { Users } from "../models/database/tablesConnection.js";
-
-/* service */
 import { UserService } from "../services/UserService.js";
-
-/* constants */
 import { MESSAGES } from "../const/responses.js";
+import { Utils } from "../utils/index.js";
 
 export class UserController {
 	constructor() {
@@ -21,7 +11,7 @@ export class UserController {
 	}
 
 	authentication = async (req, res) => {
-		if (isEmptyObject(req.body))
+		if (Utils.objects.isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
   
 		try {
@@ -40,7 +30,7 @@ export class UserController {
 	};
 
 	create = async (req, res) => {
-		if (isEmptyObject(req.body))
+		if (Utils.objects.isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
 		try {
@@ -94,11 +84,11 @@ export class UserController {
 	};
 
 	getPage = async (req, res) => {
-		const page = parseToInt(req.query.page, 1);
+		const page = Utils.numbers.parseToInt(req.query.page, 1);
   
 		try {
 			const users = await this.services.getPage(page);  
-			const stats = await getTableStats(Users, page);
+			const stats = await Utils.tables.getTableStats(Users, page);
   
 			return res.status(200).json({ stats, users });
 		} catch {
@@ -107,7 +97,7 @@ export class UserController {
 	};
 
 	login = async (req, res) => {		
-		if (isEmptyObject(req.body))
+		if (Utils.objects.isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
 		try {
@@ -117,7 +107,7 @@ export class UserController {
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
     
 			// check if the password is valid.
-			if (!compareEncrypt(req.body.password, user.password))
+			if (!Utils.encrypt.compareEncrypt(req.body.password, user.password))
 				return res.status(401).json({ message: MESSAGES.LOGIN_ERROR });
       
 			this.services.generateToken(user);
@@ -147,7 +137,7 @@ export class UserController {
 		if (!id)
 			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
 
-		if (isEmptyObject(req.body))
+		if (Utils.objects.isEmptyObject(req.body))
 			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
 
 		try {

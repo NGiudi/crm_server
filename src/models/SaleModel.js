@@ -1,9 +1,6 @@
 import Sequelize from "sequelize";
 
-/* models */
 import { Products, ProductsSale, Sales, Users } from "./database/tablesConnection.js";
-
-/* constants */
 import { SETTINGS } from "../const/settings.js";
 
 export class SaleModel {

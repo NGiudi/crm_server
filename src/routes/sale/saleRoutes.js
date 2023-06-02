@@ -1,10 +1,7 @@
 import express from "express";
 
-/* middlewares */
-import { authLoggedInUser } from "../../middlewares/auth.js";
-
-/* controllers */
 import { SaleController } from "../../controllers/saleController.js";
+import { authLoggedInUser } from "../../middlewares/auth.js";
 
 export class SaleRoutes {
   

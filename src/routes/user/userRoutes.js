@@ -1,9 +1,6 @@
 import express from "express";
 
-/* middlewares */
 import { authActiveUser, authRoleMiddleware } from "../../middlewares/auth.js";
-
-/* controllers */
 import { UserController } from "../../controllers/userController.js";
 
 export class UserRoutes {

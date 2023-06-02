@@ -1,11 +1,6 @@
-/* models */
 import { Users } from "../models/database/tablesConnection.js";
-
-/* utils */
-import { decodeToken } from "../utils/token.js";
-
-/* constants */
 import { MESSAGES } from "../const/responses.js";
+import { Utils } from "../utils/index.js";
 
 /*
   Middleware: authActiveUser
@@ -64,7 +59,7 @@ export const authLoggedInUser = () => async (req, res, next) => {
 		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {
-		const decodedToken = decodeToken(token);
+		const decodedToken = Utils.tokens.decodeToken(token);
 
 		const user = await Users.findByPk(decodedToken.user_id, {
 			attributes: { 
@@ -100,7 +95,7 @@ export const authRoleMiddleware = (role) => async (req, res, next) => {
 		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {  
-		const decodedToken = decodeToken(token);   
+		const decodedToken = Utils.tokens.decodeToken(token);   
 
 		const user = await Users.findByPk(decodedToken.user_id, {
 			attributes: { 

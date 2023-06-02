@@ -1,7 +1,4 @@
-/* models */
 import { Users } from "./database/tablesConnection.js";
-
-/* constants */
 import { SETTINGS } from "../const/settings.js";
 
 export class UserModel {

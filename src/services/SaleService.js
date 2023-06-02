@@ -1,9 +1,7 @@
-/* models */
+import lodash from "lodash";
+
 import { Products } from "../models/database/tablesConnection.js";
 import { SaleModel } from "../models/SaleModel.js";
-
-/* utils */
-import lodash from "lodash";
 
 export class SaleService {
 	constructor() {

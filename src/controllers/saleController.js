@@ -1,13 +1,7 @@
-/* utils */
-import { getTableStats } from "../utils/tables.js";
-import { parseToInt } from "../utils/numbers.js";
-
-/* models */
 import { Sales } from "../models/database/tablesConnection.js";
 import { SaleService } from "../services/SaleService.js";
-
-/* constants */
 import { MESSAGES } from "../const/responses.js";
+import { Utils } from "../utils/index.js";
 
 export class SaleController {
   
@@ -56,11 +50,11 @@ export class SaleController {
 	};
 
 	getPage = async (req, res) => {
-		const page = parseToInt(req.query.page, 1);
+		const page = Utils.numbers.parseToInt(req.query.page, 1);
 
 		try {
 			const sales = await this.services.getPage(page);
-			const stats = await getTableStats(Sales, page);
+			const stats = await Utils.tables.getTableStats(Sales, page);
   
 			return res.status(200).json({ sales, stats });
 		} catch {
