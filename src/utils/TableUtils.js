@@ -1,7 +1,7 @@
 /* constants */
 import { SETTINGS } from "../const/settings.js";
 
-export class TableFns {
+export class TableUtils {
 	static async getTableStats(model, page, options) {
 		const totalUsers = await model.count(options);
 	

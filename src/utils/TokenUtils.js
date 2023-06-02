@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
 
-export class TokenFns {
+export class TokenUtils {
 	static createToken(data) {
 		dotenv.config();
 		return jwt.sign(data, process.env.JWT_KEY);

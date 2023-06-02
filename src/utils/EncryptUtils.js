@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 /* constants */
 import { SETTINGS } from "../const/settings.js";
 
-export class EncryptFns {
+export class EncryptUtils {
 	static compareEncrypt(value, hash) {
 		return bcrypt.compareSync(value, hash);
 	}

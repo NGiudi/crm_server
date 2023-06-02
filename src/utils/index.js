@@ -1,13 +1,13 @@
-import { EncryptFns } from "./EncyptsUtils.js";
-import { NumbersFns } from "./NumbersUtils.js";
-import { ObjectsFns } from "./ObjectsUtils.js";
-import { TableFns } from "./TablesUtils.js";
-import { TokenFns } from "./TokensUtils.js";
+import { EncryptUtils } from "./EncryptUtils.js";
+import { NumberUtils } from "./NumberUtils.js";
+import { ObjectUtils } from "./ObjectUtils.js";
+import { TableUtils } from "./TableUtils.js";
+import { TokenUtils } from "./TokenUtils.js";
 
 export class Utils {
-  static encrypt = EncryptFns;
-  static numbers = NumbersFns;
-  static objects = ObjectsFns;
-  static tables  = TableFns;
-  static tokens  = TokenFns;
+  static encrypt = EncryptUtils;
+  static numbers = NumberUtils;
+  static objects = ObjectUtils;
+  static tables  = TableUtils;
+  static tokens  = TokenUtils;
 }

@@ -1,4 +1,4 @@
-export class NumbersFns {
+export class NumberUtils {
 	static parseToInt(string, defaultValue = 0) {
 		let number = parseInt(string);
 	
