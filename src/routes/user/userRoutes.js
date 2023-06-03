@@ -1,6 +1,6 @@
 import express from "express";
 
-import { authActiveUser, authRoleMiddleware } from "../../middlewares/auth.js";
+import { authActiveUser, authLoggedInUser, authRoleMiddleware } from "../../middlewares/auth.js";
 import { UserController } from "../../controllers/userController.js";
 
 export class UserRoutes {
@@ -16,7 +16,7 @@ export class UserRoutes {
 		this.router.get("/", authRoleMiddleware("admin"), this.controller.getPage);
 		this.router.put("/:id", authRoleMiddleware("admin"), this.controller.update);
 		
-		this.router.post("/authentication", authActiveUser(), this.controller.authentication);
+		this.router.post("/authentication", authLoggedInUser(), this.controller.authentication);
 		this.router.post("/signup", authRoleMiddleware("admin"), this.controller.create);
 		this.router.post("/login", authActiveUser(), this.controller.login);
 		this.router.post("/logout", this.controller.logout);

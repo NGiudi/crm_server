@@ -1,4 +1,5 @@
 import { UserModel } from "../models/UserModel.js";
+import { SETTINGS } from "../const/settings.js";
 import { Utils } from "../utils/index.js";
 
 export class UserService {
@@ -19,7 +20,14 @@ export class UserService {
   }
 
   generateToken = async (user) => {
-    user.token = Utils.tokens.createToken({ user_id: user.id });
+    const now = new Date();
+
+    const tokenObj = {
+      user_id: user.id,
+      expired_at: now.setDate(now.getDate() + SETTINGS.TOKEN_EXPIRED_IN_DAYS),
+    };
+
+    user.token = Utils.tokens.createToken(tokenObj);
 		const newUser = this.model.update(user.id, { token: user.token });
     return newUser;
   }

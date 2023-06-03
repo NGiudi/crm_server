@@ -9,28 +9,19 @@ import { Utils } from "../utils/index.js";
     Este middleware es utilizado para autenticar y autorizar a los usuarios de una 
     aplicación web. Comprueba si el usuario está activo.
 */
-
 export const authActiveUser = () => async (req, res, next) => {
-	if (!req.body || (!req.body.email && !req.body.user_id))
+	if (!req.body || !req.body.email)
 		return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
 
 	let user = null;
 
 	try {
-		if (req.body.email) {
-			user = await Users.findOne({
-				attributes: { 
-					include: ["token", "role"],
-				},
-				where: { email: req.body.email},
-			});
-		} else if (req.body.user_id) {
-			user = await Users.findByPk(req.body.user_id, {
-				attributes: { 
-					include: ["token", "role"],
-				}
-			});
-		}
+		user = await Users.findOne({
+			attributes: { 
+				include: ["token", "role"],
+			},
+			where: { email: req.body.email},
+		});
 		
 		if (!user)
 			return res.status(401).json({ message: MESSAGES.USER_NOT_FOUND });
@@ -59,9 +50,13 @@ export const authLoggedInUser = () => async (req, res, next) => {
 		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {
-		const decodedToken = Utils.tokens.decodeToken(token);
+		const decoded = Utils.tokens.decodeToken(token);
+		const now = new Date();
 
-		const user = await Users.findByPk(decodedToken.user_id, {
+		if (now > decoded.expired_at)
+			return res.status(403).json({ message: MESSAGES.USER_UNAUTHORIZED });
+
+		const user = await Users.findByPk(decoded.user_id, {
 			attributes: { 
 				include: ["token", "role"],
 			}
@@ -95,15 +90,19 @@ export const authRoleMiddleware = (role) => async (req, res, next) => {
 		return res.status(401).json({ message: MESSAGES.TOKEN_REQUIRED });
 
 	try {  
-		const decodedToken = Utils.tokens.decodeToken(token);   
+		const decoded = Utils.tokens.decodeToken(token);   
+		const now = new Date();
 
-		const user = await Users.findByPk(decodedToken.user_id, {
+		if (now > decoded.expired_at)
+			return res.status(403).json({ message: MESSAGES.USER_UNAUTHORIZED });
+
+		const user = await Users.findByPk(decoded.user_id, {
 			attributes: { 
 				include: ["token", "role"],
 			}
 		});
 
-		const isMe = req.params.id && parseInt(req.params.id) === decodedToken.user_id; 
+		const isMe = req.params.id && parseInt(req.params.id) === decoded.user_id; 
 
 		if (!user || user.token !== token)
 			return res.status(401).json({ message: MESSAGES.INVALID_TOKEN });
