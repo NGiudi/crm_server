@@ -9,7 +9,7 @@ export class UserService {
   }
 
   create = async (body) => {
-    const hashedPassword = Utils.tokens.hashEncrypt(body.password);
+    const hashedPassword = Utils.encrypt.hashEncrypt(body.password);
     const user = await this.model.create({ ...body, password: hashedPassword });
     return user;
   }
