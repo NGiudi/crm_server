@@ -14,6 +14,7 @@ export class ProductModel {
 			description: body.description,
 			name: body.name,
 			price: body.price,
+			discount: body.discount,
 			stock: body.stock,
 		});
 
