@@ -32,8 +32,8 @@ export class UserService {
     return newUser;
   }
 
-  getOne = async (id, filter) => {
-    const user = await this.model.getOne(id, filter);
+  getOne = async (filter) => {
+    const user = await this.model.getOne(filter);
     return user;
   }
 
