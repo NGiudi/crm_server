@@ -2,6 +2,7 @@ import lodash from "lodash";
 
 import { Products } from "../models/database/tablesConnection.js";
 import { SaleModel } from "../models/SaleModel.js";
+import { Utils } from "../utils/index.js";
 
 export class SaleService {
 	constructor() {
@@ -57,9 +58,12 @@ export class SaleService {
 		return sale;
 	}	
 
-	getPage = async (page) => {
-		const sales = await this.model.getPage(page);
-		return sales;
+	getPage = async (params) => {
+		const { count, rows } = await this.model.getPage(params);
+
+		const stats = await Utils.tables.getPaginationStats(params.page, count);
+
+		return { sales: rows, stats };
 	}
 
 	getProductsSaleOfSale = async (id) => {

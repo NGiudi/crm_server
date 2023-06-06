@@ -11,4 +11,12 @@ export class TableUtils {
 			total: totalUsers,
 		};
 	}
+
+	static getPaginationStats(page, count) {
+		return {
+			page: page,
+			pages: Math.ceil(count / SETTINGS.PAGE_LIMIT),
+			total: count,
+		};
+	}
 } 

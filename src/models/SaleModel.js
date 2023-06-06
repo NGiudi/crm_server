@@ -29,8 +29,10 @@ export class SaleModel {
     return sale;
   }
 
-  getPage = async (page) => {
-    const sales = await Sales.findAll({
+  getPage = async (params) => {
+    const { page, seller_id } = params;
+
+    let queryObj = {
 			attributes: {
 				exclude: ["deleted_at"],
 			},
@@ -40,9 +42,14 @@ export class SaleModel {
 			}],
 			limit: SETTINGS.PAGE_LIMIT,
 			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
-		});
+		};
 
-    return sales;
+    if (seller_id)
+      queryObj.where = { seller_id: seller_id };
+
+    const salesObj = await Sales.findAndCountAll(queryObj);
+
+    return salesObj;
   }
 
   getProductsSaleOfSale = async (id) => {
