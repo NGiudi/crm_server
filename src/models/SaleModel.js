@@ -64,7 +64,6 @@ export class SaleModel {
     return productsSales;
   }
 
-  //TODO: preguntarle al profe si esto no debería ser parte del modelo de producto.
   updateStock = async (productSale) => {
     const updatedFields = { 
       stock: Sequelize.literal(`stock - ${productSale.quantity}`)

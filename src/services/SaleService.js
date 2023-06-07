@@ -10,7 +10,10 @@ export class SaleService {
 	}
 
 	#calculateTotalPrice(productsSale) {
-		return productsSale.reduce((acc, ps) => acc + (ps.price * ps.quantity), 0);
+		return productsSale.reduce((acc, ps) => {
+			ps.price = ps.price * (100 - ps.discount) / 100;
+			return acc + (ps.price * ps.quantity);
+		}, 0);
 	}
 
 	async #haveProductStock(product) {
