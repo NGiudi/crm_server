@@ -48,6 +48,7 @@ export class ProductModel {
 			},
 			limit: SETTINGS.PAGE_LIMIT,
 			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
+			order: [['created_at', 'DESC']],
 			where: {
         description: {
           [Sequelize.Op.like]: q ? `%${q}%` : '%',

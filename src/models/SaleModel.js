@@ -42,6 +42,7 @@ export class SaleModel {
 			}],
 			limit: SETTINGS.PAGE_LIMIT,
 			offset: (page - 1) * SETTINGS.PAGE_LIMIT,
+      order: [['created_at', 'DESC']],
 		};
 
     if (seller_id)

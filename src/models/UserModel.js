@@ -48,6 +48,7 @@ export class UserModel {
       },
       limit: SETTINGS.PAGE_LIMIT,
       offset: (page - 1) * SETTINGS.PAGE_LIMIT,
+      order: [['created_at', 'DESC']],
     });
 
     return users;
