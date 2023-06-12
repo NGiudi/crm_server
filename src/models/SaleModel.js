@@ -77,26 +77,69 @@ export class SaleModel {
     return count;
   }
 
-  getStats = async () => {
-    const stats = [];
-
+  getStats = async (sellerId) => {
+    const stats = {
+      sales: [],
+      grossProfit: [],
+      sellerSales: [],
+      sellerGrossProfit: []
+    };
+  
     const now = new Date();
     const year = now.getFullYear();
+  
+    for (let i = 1; i <= SETTINGS.MONTH_COUNT; i++) {
+      const count = await Sales.count({
+        where: {
+          created_at: {
+            [Sequelize.Op.and]: [
+              Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), i),
+              Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year)
+            ]
+          },
+        }
+      });
+  
+      const sum = await Sales.sum('price', {
+        where: {
+          created_at: {
+            [Sequelize.Op.and]: [
+              Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), i),
+              Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year)
+            ]
+          },
+        }
+      });
+  
+      const sellerCount = await Sales.count({
+        where: {
+          seller_id: sellerId,
+          created_at: {
+            [Sequelize.Op.and]: [
+              Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), i),
+              Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year)
+            ]
+          },
+        }
+      });
 
-    for (let i=1; i <= SETTINGS.MONTH_COUNT; i++) {
-        const count  = await Sales.count({
-            where: {
-                created_at: {
-                    [Sequelize.Op.and]: [
-                        Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), i),
-                        Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year)
-                    ]
-                },
-            }
-        });
-
-        stats.push(count);
+      const sellerSum = await Sales.sum('price', {
+        where: {
+          seller_id: sellerId,
+          created_at: {
+            [Sequelize.Op.and]: [
+              Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), i),
+              Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year)
+            ]
+          },
+        }
+      });
+  
+      stats.sales.push(count);
+      stats.grossProfit.push(sum);
+      stats.sellerSales.push(sellerCount);
+      stats.sellerGrossProfit.push(sellerSum);
     }
     return stats;
-}
+  }
 }

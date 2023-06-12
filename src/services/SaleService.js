@@ -74,8 +74,8 @@ export class SaleService {
 		return productsSale;
 	}
 
-	getStats = async () => {
-		const stats = await this.model.getStats();
+	getStats = async (sellerId) => {
+		const stats = await this.model.getStats(sellerId);
 		return stats;
 	}
 }
