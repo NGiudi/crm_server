@@ -13,6 +13,7 @@ export class SaleRoutes {
 	start() {
 		this.router.post("/", authLoggedInUser(), this.controller.create);
 		this.router.get("/", authLoggedInUser(), this.controller.getPage);
+		this.router.get("/stats", authLoggedInUser(), this.controller.getStats);
 		this.router.get("/:id", authLoggedInUser(), this.controller.getOne);
 
 		return this.router;

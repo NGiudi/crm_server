@@ -16,5 +16,6 @@ export const MESSAGES = {
 	USER_LOGOUT: "user successfully logged out",
 	USER_NOT_FOUND: "user not found",
 	USER_UNAUTHORIZED: "user is not authorized",
+	STATS_NOT_FOUND: "stats not found",
 	VARIANT_NOT_FOUND: "variant not found",
 };

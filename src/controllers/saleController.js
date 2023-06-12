@@ -63,4 +63,14 @@ export class SaleController {
 			res.status(500).json();
 		}
 	};
+
+	getStats = async (req, res) => {
+		try {
+			const stats = await this.services.getStats();
+			return res.status(200).json({ stats });
+		} catch(error) {
+			console.log(error)
+		return res.status(500).json();
+	}
+	};
 }

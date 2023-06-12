@@ -66,4 +66,28 @@ export class ProductModel {
 
 		return count;
 	}
+
+	getStats = async () => {
+        const stats = [];
+
+        const now = new Date();
+        const year = now.getFullYear();
+
+        for (let i=0; i < MONTH_COUNT; i++) {
+            const count  = await Products.count({
+                where: {
+                    created_at: {
+                        [Op.and]: [
+                            Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('created_at')), ),
+                            Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), year)
+                        ]
+                    },
+                }
+            });
+
+            stats.push(count);
+        }
+
+        return stats;
+    }
 }
