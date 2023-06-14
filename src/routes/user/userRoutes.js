@@ -1,24 +1,25 @@
 import express from "express";
 
-import { authActiveUser, authLoggedInUser, authRoleMiddleware } from "../../middlewares/auth.js";
+import { Authentication } from "../../middlewares/auth.js";
 import { UserController } from "../../controllers/userController.js";
 
 export class UserRoutes {
 
 	constructor() {
+		this.auth = new Authentication();
 		this.controller = new UserController();
 		this.router = express.Router();
 	}
 
 	start() {
-		this.router.delete("/:id", authRoleMiddleware("admin"), this.controller.delete);
-		this.router.get("/:id", authRoleMiddleware("admin"), this.controller.getOne);
-		this.router.get("/", authRoleMiddleware("admin"), this.controller.getPage);
-		this.router.put("/:id", authRoleMiddleware("admin"), this.controller.update);
+		this.router.delete("/:id", this.auth.authRoleMiddleware("admin"), this.controller.delete);
+		this.router.get("/:id", this.auth.authRoleMiddleware("admin"), this.controller.getOne);
+		this.router.get("/", this.auth.authRoleMiddleware("admin"), this.controller.getPage);
+		this.router.put("/:id", this.auth.authRoleMiddleware("admin"), this.controller.update);
 		
-		this.router.post("/authentication", authLoggedInUser(), this.controller.authentication);
-		this.router.post("/signup", authRoleMiddleware("admin"), this.controller.create);
-		this.router.post("/login", authActiveUser(), this.controller.login);
+		this.router.post("/authentication", this.auth.authLoggedInUser, this.controller.authentication);
+		this.router.post("/signup", this.auth.authRoleMiddleware("admin"), this.controller.create);
+		this.router.post("/login", this.auth.authActiveUser, this.controller.login);
 		this.router.post("/logout", this.controller.logout);
 		
 		return this.router;
