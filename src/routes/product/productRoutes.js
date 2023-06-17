@@ -12,11 +12,11 @@ export class ProductRoutes {
 	}
 
 	start() {
-		this.router.get("/", this.auth.authLoggedInUser, this.controller.getPage);
-		this.router.get("/:id", this.auth.authLoggedInUser, this.controller.getOne);
-		this.router.post("/new", this.auth.authLoggedInUser, this.controller.create);
-		this.router.put("/:id", this.auth.authLoggedInUser, this.controller.update);
-		this.router.delete("/:id", this.auth.authLoggedInUser, this.controller.delete);
+		this.router.get("/", this.auth.authLoggedInUser(), this.controller.getPage);
+		this.router.get("/:id", this.auth.authLoggedInUser(), this.controller.getOne);
+		this.router.post("/new", this.auth.authLoggedInUser(), this.controller.create);
+		this.router.put("/:id", this.auth.authLoggedInUser(), this.controller.update);
+		this.router.delete("/:id", this.auth.authLoggedInUser(), this.controller.delete);
 		
 		return this.router;
 	}

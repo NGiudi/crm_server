@@ -12,10 +12,10 @@ export class SaleRoutes {
 	}
   
 	start() {
-		this.router.post("/", this.auth.authLoggedInUser, this.controller.create);
-		this.router.get("/", this.auth.authLoggedInUser, this.controller.getPage);
-		this.router.get("/stats", this.auth.authLoggedInUser, this.controller.getStats);
-		this.router.get("/:id", this.auth.authLoggedInUser, this.controller.getOne);
+		this.router.post("/", this.auth.authLoggedInUser(), this.controller.create);
+		this.router.get("/", this.auth.authLoggedInUser(), this.controller.getPage);
+		this.router.get("/stats", this.auth.authLoggedInUser(), this.controller.getStats);
+		this.router.get("/:id", this.auth.authLoggedInUser(), this.controller.getOne);
 
 		return this.router;
 	}
