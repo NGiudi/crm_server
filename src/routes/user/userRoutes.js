@@ -17,9 +17,9 @@ export class UserRoutes {
 		this.router.get("/", this.auth.authRoleMiddleware("admin"), this.controller.getPage);
 		this.router.put("/:id", this.auth.authRoleMiddleware("admin"), this.controller.update);
 		
-		this.router.post("/authentication", this.auth.authLoggedInUser, this.controller.authentication);
+		this.router.post("/authentication", this.auth.authLoggedInUser(), this.controller.authentication);
 		this.router.post("/signup", this.auth.authRoleMiddleware("admin"), this.controller.create);
-		this.router.post("/login", this.auth.authActiveUser, this.controller.login);
+		this.router.post("/login", this.auth.authActiveUser(), this.controller.login);
 		this.router.post("/logout", this.controller.logout);
 		
 		return this.router;

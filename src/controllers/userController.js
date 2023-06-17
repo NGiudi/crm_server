@@ -34,7 +34,7 @@ export class UserController {
 			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
 
 		try {
-			const existingUser = await this.services.getOneByParam({ email: req.body.email });
+			const existingUser = await this.services.getOne({ email: req.body.email });
       
 			if (existingUser)
 				return res.status(409).json({ message: MESSAGES.USER_EXIST });

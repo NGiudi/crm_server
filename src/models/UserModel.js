@@ -36,11 +36,6 @@ export class UserModel {
     return user;
   }
 
-  getOneByParam = async (param) => {
-    const user = await Users.findOne({ where: param });
-    return user;
-  }
-
   getPage = async (page) => {
     const users = await Users.findAll({
       attributes: {
