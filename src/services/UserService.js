@@ -37,11 +37,6 @@ export class UserService {
     return user;
   }
 
-  getOneByParam = async (param) => {
-    const user = await this.model.getOneByParam(param);
-    return user;
-  }
-
   getPage = async (page) => {
     const users = await this.model.getPage(page);
     return users;
