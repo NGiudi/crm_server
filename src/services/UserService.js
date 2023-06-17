@@ -1,6 +1,7 @@
 import { UserModel } from "../models/UserModel.js";
 import { SETTINGS } from "../const/settings.js";
 import { Utils } from "../utils/index.js";
+import { msg } from "../const/mails/signUpConfirmation.js";
 
 export class UserService {
   
@@ -11,6 +12,7 @@ export class UserService {
   create = async (body) => {
     const hashedPassword = Utils.encrypt.hashEncrypt(body.password);
     const user = await this.model.create({ ...body, password: hashedPassword });
+    await Utils.nodemailer.sendEmail(msg(body));
     return user;
   }
 
