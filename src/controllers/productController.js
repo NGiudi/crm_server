@@ -2,7 +2,7 @@ import { Products } from "../models/database/tablesConnection.js";
 import { ProductService } from "../services/ProductService.js";
 import { MESSAGES } from "../const/responses.js";
 import { Utils } from "../utils/index.js";
-
+import { validateProduct, validateId, validatePage} from "../validations/productValidation.js"
 export class ProductController {
   
 	constructor() {
@@ -10,8 +10,9 @@ export class ProductController {
 	}
 
 	create = async (req, res) => {
-		if (Utils.objects.isEmptyObject(req.body))
-			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
+		const validation = validateProduct(req.body);	
+		if (!validation.result)
+			return res.status(400).json({ message: validation });
 
 		try {
 			const product = await this.services.create(req.body);
@@ -22,11 +23,11 @@ export class ProductController {
 	};
 
 	delete = async (req, res) => {
-		const { id } = req.params;
-
-		if (!id)
-			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
-
+		const id = Number(req.params.id);
+		const validationId = validateId({id});
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
+	
 		try {
 			const count = await this.services.delete(id);
 
@@ -40,11 +41,11 @@ export class ProductController {
 	};
 
 	getOne = async (req, res) => {
-		const { id } = req.params;
-
-		if (!id)
-			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
-
+		const id = Number(req.params.id);
+		const validationId = validateId({id});
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
+	
 		try {
 			const product = await this.services.getOne(id);
   
@@ -58,8 +59,11 @@ export class ProductController {
 	};
 
 	getPage = async (req, res) => {
-		const page = Utils.numbers.parseToInt(req.query.page, 1);
-		
+		const page = Number(req.query.page);
+		const validationPage = validatePage({page});
+		if (!validationPage.result)
+			return res.status(400).json({ message: validationPage });
+	
 		const params = {
 			page,
 			q: req.query.q || null,
@@ -76,13 +80,14 @@ export class ProductController {
 	};
 
 	update = async (req, res) => {
-		const { id } = req.params;
-
-		if (!id)
-			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
-
-		if (Utils.objects.isEmptyObject(req.body))
-			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
+		const id = Number(req.params.id);
+		const validationId = validateId({id});
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
+		
+		const validationBody = validateProduct(req.body);	
+		if (!validationBody.result)
+			return res.status(400).json({ message: validationBody });
 
 		try {
 			const count = await this.services.update(id, req.body);
