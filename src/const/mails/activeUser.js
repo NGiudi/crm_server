@@ -1,5 +1,5 @@
 
-export const msg = (body) => ({
+export const activeMsg = (body) => ({
     from: 'hololents@gmail.com',
     to: `${body.email}`,
     subject: 'Cuenta activada en Hololens',

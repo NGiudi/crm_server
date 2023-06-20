@@ -1,7 +1,7 @@
 import { UserModel } from "../models/UserModel.js";
 import { SETTINGS } from "../const/settings.js";
 import { Utils } from "../utils/index.js";
-import { msg } from "../const/mails/signUpConfirmation.js";
+import { Message } from "../const/mails/index.js";
 
 export class UserService {
   
@@ -12,7 +12,7 @@ export class UserService {
   create = async (body) => {
     const hashedPassword = Utils.encrypt.hashEncrypt(body.password);
     const user = await this.model.create({ ...body, password: hashedPassword });
-    await Utils.nodemailer.sendEmail(msg(body));
+    await Utils.nodemailer.sendEmail(Message.activeMsg(body));
     return user;
   }
 
@@ -46,6 +46,9 @@ export class UserService {
 
   update = async (id, modifiedUser) => {
     const count = await this.model.update(id, modifiedUser);
+    if(!modifiedUser.active){
+      await Utils.nodemailer.sendEmail(Message.inactiveMsg(modifiedUser));
+    }
     return count;
   }
 }
