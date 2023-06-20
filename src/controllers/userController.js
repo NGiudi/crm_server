@@ -4,6 +4,7 @@ import { Users } from "../models/database/tablesConnection.js";
 import { UserService } from "../services/UserService.js";
 import { MESSAGES } from "../const/responses.js";
 import { Utils } from "../utils/index.js";
+import { validateLogin } from "../validations/userValidation.js"
 
 export class UserController {
 	constructor() {
@@ -96,14 +97,15 @@ export class UserController {
 		}
 	};
 
-	login = async (req, res) => {		
-		if (Utils.objects.isEmptyObject(req.body))
-			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
+	login = async (req, res) => {
+		const validation = validateLogin(req.body);	
+		if (!validation.result)
+			return res.status(400).json({ message: validation });
 
 		try {
 			const user = await this.services.getOne({ email: req.body.email });
     
-			if (!user)
+			if (!user || !user.active)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
     
 			// check if the password is valid.

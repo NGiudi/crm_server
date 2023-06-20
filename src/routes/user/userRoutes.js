@@ -19,7 +19,7 @@ export class UserRoutes {
 		
 		this.router.post("/authentication", this.auth.authLoggedInUser(), this.controller.authentication);
 		this.router.post("/signup", this.auth.authRoleMiddleware("admin"), this.controller.create);
-		this.router.post("/login", this.auth.authActiveUser(), this.controller.login);
+		this.router.post("/login", this.controller.login);
 		this.router.post("/logout", this.controller.logout);
 		
 		return this.router;

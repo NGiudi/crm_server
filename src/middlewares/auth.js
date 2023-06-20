@@ -7,30 +7,6 @@ export class Authentication {
 		this.model = new UserModel();
 	}
 
-	authActiveUser() {
-		return async (req, res, next) => {
-			if (!req.body || !req.body.email)
-				return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
-		
-			let user = null;
-		
-			try {
-				user = await this.model.getOne({ email: req.body.email });
-
-				if (!user)
-					return res.status(401).json({ message: MESSAGES.USER_NOT_FOUND });
-		
-				if (!user.active)
-					return res.status(401).json({ message: MESSAGES.USER_INACTIVE });
-				
-				next();
-			} catch(err) {
-				console.log(err);
-				return res.status(500).json();
-			}
-		}
-	};
-	
 	authLoggedInUser() {
 		return async (req, res, next) => {
 			const token = req.headers.authorization;
