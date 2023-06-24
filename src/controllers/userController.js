@@ -4,7 +4,7 @@ import { Users } from "../models/database/tablesConnection.js";
 import { UserService } from "../services/UserService.js";
 import { MESSAGES } from "../const/responses.js";
 import { Utils } from "../utils/index.js";
-import { validateLogin } from "../validations/userValidation.js"
+import { validateLogin, validateLogout, validateAuthentication, validateSignup, validateUpdate, validateId, validatePage } from "../validations/userValidation.js"
 
 export class UserController {
 	constructor() {
@@ -12,8 +12,9 @@ export class UserController {
 	}
 
 	authentication = async (req, res) => {
-		if (Utils.objects.isEmptyObject(req.body))
-			return res.status(400).json({ message: MESSAGES.QUERY_BODY_REQUIRED });
+		const validation = validateAuthentication(req.body)
+		if (!validation.result)
+		return res.status(400).json({ message: validation });
   
 		try {
 			const user = await this.services.getOne({ id: req.body.user_id });
@@ -31,8 +32,9 @@ export class UserController {
 	};
 
 	create = async (req, res) => {
-		if (Utils.objects.isEmptyObject(req.body))
-			return res.status(400).json({ message: MESSAGES.PRODUCT_REQUIRED_FIELDS });
+		const validation = validateSignup(req.body)
+		if (!validation.result)
+		return res.status(400).json({ message: validation });
 
 		try {
 			const existingUser = await this.services.getOne({ email: req.body.email });
@@ -49,10 +51,10 @@ export class UserController {
 	};
 
 	delete = async (req, res) => {
-		const { id } = req.params;
-
-		if (!id)
-			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
+		const id = Number(req.params.id);
+		const validationId = validateId({id});
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
 
 		try {
 			const count = await this.services.delete(id);
@@ -67,10 +69,10 @@ export class UserController {
 	};
 
 	getOne = async (req, res) => {
-		const { id } = req.params;
-
-		if (!id)
-			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
+		const id = Number(req.params.id);
+		const validationId = validateId({id});
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
 
 		try {
 			const user = await this.services.getOne({ id });
@@ -85,7 +87,10 @@ export class UserController {
 	};
 
 	getPage = async (req, res) => {
-		const page = Utils.numbers.parseToInt(req.query.page, 1);
+		const page = Number(req.query.page);
+		const validationPage = validatePage({page});
+		if (!validationPage.result)
+			return res.status(400).json({ message: validationPage });
   
 		try {
 			const users = await this.services.getPage(page);  
@@ -121,6 +126,10 @@ export class UserController {
 	};
 
 	logout = async (req, res) => {
+		const validation = validateLogout(req.body);	
+		if (!validation.result)
+			return res.status(400).json({ message: validation });
+
 		try {
 			const count = await this.services.update(req.body.user_id, { token: null });
   
@@ -135,6 +144,10 @@ export class UserController {
 
 	update = async (req, res) => {
 		const { id } = req.params;
+
+		const validation = validateUpdate(req.body)
+		if (!validation.result)
+		return res.status(400).json({ message: validation });
 
 		if (!id)
 			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
