@@ -1,6 +1,6 @@
 import { SaleService } from "../services/SaleService.js";
 import { MESSAGES } from "../const/responses.js";
-import { Utils } from "../utils/index.js";
+import { validateSale, validateId, validatePage} from "../validations/saleValidation.js"
 
 export class SaleController {
   
@@ -9,18 +9,18 @@ export class SaleController {
 	}
 
 	create = async (req, res) => {
-		const sale = req.body;
+		const validation = validateSale(req.body);
 
-		if (!sale || !sale.products || sale.products.length === 0)
-			return res.status(400).json({ message: MESSAGES.SALE_REQUIRED_FIELDS });
+		if (!validation.result)
+			return res.status(400).json({ message: validation });
 				
 		try {
-			const haveStock = await this.services.allProductsHaveStock(sale.products);
+			const haveStock = await this.services.allProductsHaveStock(req.body.products);
 
 			if (!haveStock)
 				return res.status(422).json({ message: MESSAGES.SALE_WITHOUT_STOCK });
 
-			const newSale = await this.services.create(sale);
+			const newSale = await this.services.create(req.body);
   
 			return res.status(201).json(newSale);	
 		} catch {
@@ -28,11 +28,13 @@ export class SaleController {
 		}
 	};
 
-	getOne = async (req, res) => {
-		const { id } = req.params;
 
-		if (!id)
-			return res.status(400).json({ message: MESSAGES.ID_REQUIRED });
+
+	getOne = async (req, res) => {
+		const id = Number(req.params.id);
+		const validationId = validateId({id});
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
 
 		try {
 			const sale = await this.services.getOne(id);
@@ -49,7 +51,10 @@ export class SaleController {
 	};
 
 	getPage = async (req, res) => {
-		const page = Utils.numbers.parseToInt(req.query.page, 1);
+		const page = Number(req.query.page) || 1;
+		const validationPage = validatePage({page});
+		if (!validationPage.result)
+			return res.status(400).json({ message: validationPage });
 
 		const params = {
 			page,
@@ -65,6 +70,11 @@ export class SaleController {
 	};
 
 	getStats = async (req, res) => {
+		const id = req.params.id;
+		const validationId = validateId(id);
+		if (!validationId.result)
+			return res.status(400).json({ message: validationId });
+
 		try {
 		  const sellerId = req.query.sellerId;
 		  const stats = await this.services.getStats(sellerId);

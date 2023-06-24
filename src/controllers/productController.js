@@ -3,6 +3,7 @@ import { ProductService } from "../services/ProductService.js";
 import { MESSAGES } from "../const/responses.js";
 import { Utils } from "../utils/index.js";
 import { validateProduct, validateId, validatePage} from "../validations/productValidation.js"
+
 export class ProductController {
   
 	constructor() {
@@ -59,7 +60,7 @@ export class ProductController {
 	};
 
 	getPage = async (req, res) => {
-		const page = Number(req.query.page);
+		const page = Number(req.query.page) || 1;
 		const validationPage = validatePage({page});
 		if (!validationPage.result)
 			return res.status(400).json({ message: validationPage });
