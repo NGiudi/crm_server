@@ -70,14 +70,13 @@ export class SaleController {
 	};
 
 	getStats = async (req, res) => {
-		const id = req.params.id;
-		const validationId = validateId(id);
+		const id = req.query.sellerId;
+		const validationId = validateId({id});
 		if (!validationId.result)
 			return res.status(400).json({ message: validationId });
 
 		try {
-		  const sellerId = req.query.sellerId;
-		  const stats = await this.services.getStats(sellerId);
+		  const stats = await this.services.getStats(id);
 		  return res.status(200).json({ stats });
 		} catch (error) {
 		  console.log(error);

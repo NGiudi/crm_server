@@ -1,9 +1,17 @@
 import Joi from 'joi';
 
 export const validateSale = sale => {
+
+    const productsSchema = Joi.object({
+        discount: Joi.number().min(0).required(),
+        price: Joi.number().min(0).required(),
+        product_id: Joi.number().min(1).required(),
+        quantity: Joi.number().min(1).required(),
+    });
+
     const saleSchema = Joi.object({
         client: Joi.string().required(),
-        products: Joi.array().min(1).required(),
+        products: Joi.array().items(productsSchema).min(1).required(),
         seller_id: Joi.number().required(),
     });
 
