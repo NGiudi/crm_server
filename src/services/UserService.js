@@ -46,7 +46,7 @@ export class UserService {
 
   update = async (id, modifiedUser) => {
     const count = await this.model.update(id, modifiedUser);
-    if(!modifiedUser.active){
+    if(modifiedUser.email && !modifiedUser.active){
       await Utils.nodemailer.sendEmail(Message.inactiveMsg(modifiedUser));
     }
     return count;

@@ -4,7 +4,7 @@ import { Users } from "../models/database/tablesConnection.js";
 import { UserService } from "../services/UserService.js";
 import { MESSAGES } from "../const/responses.js";
 import { Utils } from "../utils/index.js";
-import { validateLogin, validateLogout, validateAuthentication, validateSignup, validateUpdate, validateId, validatePage } from "../validations/userValidation.js"
+import { validateLogin, validateAuthentication, validateSignup, validateUpdate, validateId, validatePage } from "../validations/userValidation.js"
 
 export class UserController {
 	constructor() {
@@ -113,7 +113,6 @@ export class UserController {
 			if (!user || !user.active)
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
     
-			// check if the password is valid.
 			if (!Utils.encrypt.compareEncrypt(req.body.password, user.password))
 				return res.status(401).json({ message: MESSAGES.LOGIN_ERROR });
       
@@ -126,7 +125,8 @@ export class UserController {
 	};
 
 	logout = async (req, res) => {
-		const validation = validateLogout(req.body);	
+		const id = Number(req.body.user_id)
+		const validation = validateId({id});	
 		if (!validation.result)
 			return res.status(400).json({ message: validation });
 
@@ -137,7 +137,8 @@ export class UserController {
 				return res.status(404).json({ message: MESSAGES.USER_NOT_FOUND });
 
 		 	return res.status(200).json({ message: MESSAGES.USER_LOGOUT });
-		} catch {
+		} catch(err) {
+			console.log(err)
 			return res.status(500).json();
 		}
 	};

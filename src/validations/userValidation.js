@@ -15,20 +15,6 @@ if (error) {
 return { result: true };
 };
 
-export const validateLogout = logout => {
-    const logoutSchema = Joi.object({
-        user_id: Joi.number().required(),
-    });
-    
-    const { error } = logoutSchema.validate(logout);
-
-    if (error) {
-        return { result: false, error };
-    }
-
-    return { result: true };
-    };
-
 export const validateAuthentication = authentication => {
     const authenticationSchema = Joi.object({
         user_id: Joi.number().required(),
@@ -48,9 +34,11 @@ export const validateSignup = signup => {
     const signupSchema = Joi.object({
         names: Joi.string().min(3).required(),
         last_name: Joi.string().min(2).required(),
+        phone: Joi.string().min(8).required(),
         password: Joi.string().required(),
         email: Joi.string().email().required(),
-        role: Joi.required()
+        role: Joi.string().required(),
+        active: Joi.boolean().required()
     });
     
     const { error } = signupSchema.validate(signup);
@@ -66,9 +54,11 @@ export const validateUpdate = update => {
     const updateSchema = Joi.object({
         names: Joi.string().min(3).required(),
         last_name: Joi.string().min(2).required(),
+        phone: Joi.string().min(8).required(),
         password: Joi.string(),
         email: Joi.string().email().required(),
-        role: Joi.required()
+        role: Joi.required(),
+        active: Joi.boolean().required()
     });
     
     const { error } = updateSchema.validate(update);
