@@ -36,7 +36,7 @@ export const validateSignup = signup => {
         last_name: Joi.string().min(2).required(),
         phone: Joi.string().min(8).required(),
         password: Joi.string().required(),
-        email: Joi.string().email().required(),
+        email: Joi.string().pattern(new RegExp(/^[^\s@]+@[^\s@]+$/)).required(),
         role: Joi.string().required(),
         active: Joi.boolean().required()
     });

@@ -1,28 +1,37 @@
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
-
-dotenv.config();
 
 /* routes */
 import { ProductRoutes } from "./routes/product/productRoutes.js";
 import { SaleRoutes } from "./routes/sale/saleRoutes.js";
 import { UserRoutes } from "./routes/user/userRoutes.js";
 
-const app = express();
+export class App {
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+	constructor(port){
+		this.app = express();
+		this.PORT = port;
+	}
 
-/* routes in use. */
-app.use("/products", new ProductRoutes().start());
-app.use("/sales", new SaleRoutes().start());
-app.use("/users", new UserRoutes().start());
+	start(){
+		this.app.use(cors());
+		this.app.use(express.json());
+		this.app.use(express.urlencoded({ extended: true }));
+		
+		/* routes in use. */
+		this.app.use("/products", new ProductRoutes().start());
+		this.app.use("/sales", new SaleRoutes().start());
+		this.app.use("/users", new UserRoutes().start());
+		
+		/* init listen server in asigned port.*/
+		this.server = this.app.listen(this.PORT, () => {
+			console.log(`Server runing in port ${this.PORT}...`);
+		});
 
-/* init listen server in asigned port.*/
-const PORT = process.env.PORT || 3005;
+		return this.app
+	}
 
-app.listen(PORT, () => {
-	console.log(`Server runing in port ${PORT}...`);
-});
+	stop(){
+		this.server.close();
+	}
+}

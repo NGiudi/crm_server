@@ -5,9 +5,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/app",
+    "dev": "nodemon src/index",
     "start": "npm start",
-    "test": "mocha src/test/api.test.js"
+    "test": "mocha src/test/*.test.js --timeout 10000"
   },
   "keywords": [],
   "author": "",
