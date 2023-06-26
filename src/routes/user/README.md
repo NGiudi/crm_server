@@ -25,9 +25,11 @@
     body: {
       "names": "Nicolás Martin",
       "last_name": "Giudice",
+      “phone”: “1234567890”,
       "password": "pass1234",
       "email": "nicolas.m.giudice@gmail.com",
       "role": "admin"
+      "active": true
     }
   ```
   
